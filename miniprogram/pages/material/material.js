@@ -24,7 +24,11 @@ Page({
 
   async loadData() {
     try {
-      const dashboard = await api.material.getDashboard(getApp().globalData.orgInfo?.org_id || getApp().globalData.userInfo?.org_id);
+      var app = getApp();
+      var orgId = (app.globalData.orgInfo && app.globalData.orgInfo.org_id) 
+        || (app.globalData.userInfo && app.globalData.userInfo.org_id)
+        || '';
+      const dashboard = await api.material.getDashboard(orgId);
       this.setData({ stats: dashboard.stats, recentLogs: dashboard.recentLogs });
     } catch (err) {
       console.error('加载仪表盘失败:', err);
