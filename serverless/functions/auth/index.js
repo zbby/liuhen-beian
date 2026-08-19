@@ -8,12 +8,18 @@ const createServices = require('../../common/services');
 const { success, failFromError } = require('../../common/utils/errors');
 const dingtalk = require('../../common/dingtalk-client');
 
-// 初始化钉钉凭证
-dingtalk.init({
-  appKey: process.env.DINGTALK_APP_KEY || 'dingb4uqplxslldd9uaa',
-  appSecret: process.env.DINGTALK_APP_SECRET || 'TtF1E2GCZIGkSjs8B_91q1Jm0rklNyotb_3MUS7pkrnfw6q6UVIxKxUFYCAjtRh3',
-  agentId: process.env.DINGTALK_AGENT_ID || '4598010509',
-});
+// 凭证由钉钉云环境自动注入，无需硬编码
+// 首次调用时延迟初始化（确保环境变量已就绪）
+let _inited = false;
+function ensureDingtalkInit() {
+  if (_inited) return;
+  dingtalk.init({
+    appKey: process.env.DINGTALK_APP_KEY,
+    appSecret: process.env.DINGTALK_APP_SECRET,
+    agentId: process.env.DINGTALK_AGENT_ID,
+  });
+  _inited = true;
+}
 
 /**
  * 云函数入口
@@ -28,6 +34,8 @@ exports.handler = async function (event, context) {
   const method = (event.method || event.httpMethod || 'GET').toUpperCase();
 
   try {
+    ensureDingtalkInit();
+
     // POST /auth/login
     if (path === '/auth/login' && method === 'POST') {
       const { authCode } = event.body || {};

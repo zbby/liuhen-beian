@@ -194,11 +194,10 @@ module.exports = {
     },
   ],
 
-  // 环境变量
+  // 环境变量 — 凭证由钉钉云自动注入，此处仅配置非敏感项
   environment: {
-    DINGTALK_APP_KEY: 'dingb4uqplxslldd9uaa',
-    DINGTALK_AGENT_ID: '4598010509',
-    JWT_SECRET: '${env.JWT_SECRET}',  // 敏感信息从环境变量读取
-    // DINGTALK_APP_SECRET 不在此处配置，通过钉钉开发者工具安全注入
+    JWT_SECRET: '${env.JWT_SECRET}',  // 从部署环境读取
+    // DINGTALK_APP_KEY / DINGTALK_APP_SECRET / DINGTALK_AGENT_ID
+    // 由钉钉云运行时自动注入，无需手动配置
   },
 };
