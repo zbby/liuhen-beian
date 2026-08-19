@@ -31,23 +31,33 @@
     "items": [
       {
         "pagePath": "pages/index/index",
-        "name": "首页"
+        "name": "首页",
+        "icon": "",
+        "activeIcon": ""
       },
       {
         "pagePath": "pages/create/create",
-        "name": "发起"
+        "name": "发起",
+        "icon": "",
+        "activeIcon": ""
       },
       {
         "pagePath": "pages/approval/approval",
-        "name": "审批"
+        "name": "审批",
+        "icon": "",
+        "activeIcon": ""
       },
       {
         "pagePath": "pages/history/history",
-        "name": "历史"
+        "name": "历史",
+        "icon": "",
+        "activeIcon": ""
       },
       {
         "pagePath": "pages/profile/profile",
-        "name": "我的"
+        "name": "我的",
+        "icon": "",
+        "activeIcon": ""
       }
     ]
   },
