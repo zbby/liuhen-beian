@@ -1,0 +1,221 @@
+/**
+ * common/utils/constants.js
+ * 业务常量定义
+ */
+
+// 事件状态
+const EVENT_STATUS = {
+  DRAFT: 'DRAFT',
+  PENDING_APPROVAL: 'PENDING_APPROVAL',
+  PROCESSING: 'PROCESSING',
+  PENDING_EXTERNAL: 'PENDING_EXTERNAL',
+  COMPLETED: 'COMPLETED',
+  ARCHIVED: 'ARCHIVED',
+  REJECTED: 'REJECTED',
+  WITHDRAWN: 'WITHDRAWN',
+};
+
+// 事件类型
+const EVENT_TYPES = [
+  'GENERAL',
+  'INCIDENT',
+  'MEETING',
+  'MATERIAL_IN',
+  'MATERIAL_OUT',
+  'MATERIAL_TRANSFER',
+  'MATERIAL_RETURN',
+  'MATERIAL_SCRAP',
+  'MATERIAL_ALLOCATION',
+];
+
+// 审批流状态
+const APPROVAL_FLOW_STATUS = {
+  PENDING: 'PENDING',
+  ACTIVE: 'ACTIVE',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED',
+  CANCELLED: 'CANCELLED',
+  SUSPENDED: 'SUSPENDED',
+};
+
+// 审批节点状态
+const APPROVAL_STEP_STATUS = {
+  PENDING: 'PENDING',
+  ACTIVE: 'ACTIVE',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED',
+  SKIPPED: 'SKIPPED',
+  ESCALATED: 'ESCALATED',
+  TIMEOUT: 'TIMEOUT',
+};
+
+// 审批节点类型
+const NODE_TYPE = {
+  APPROVAL: 'APPROVAL',
+  CC: 'CC',
+  WITNESS: 'WITNESS',
+  ACTION: 'ACTION',
+};
+
+// 审批模式
+const APPROVAL_MODE = {
+  COUNTERSIGN: 'COUNTERSIGN',
+  ANY_SIGN: 'ANY_SIGN',
+  NOTIFY_ONLY: 'NOTIFY_ONLY',
+};
+
+// 指派类型
+const ASSIGNMENT_TYPE = {
+  MANUAL: 'MANUAL',
+  AUTO: 'AUTO',
+  PRESET: 'PRESET',
+  RULE: 'RULE',
+};
+
+// 超时动作
+const TIMEOUT_ACTION = {
+  REMIND: 'REMIND',
+  ESCALATE: 'ESCALATE',
+  AUTO_PASS: 'AUTO_PASS',
+  AUTO_REJECT: 'AUTO_REJECT',
+};
+
+// 甲供材库存状态
+const MAT_INVENTORY_STATUS = {
+  IN_STOCK_CENTER: 'IN_STOCK_CENTER',
+  IN_STOCK_PROJECT: 'IN_STOCK_PROJECT',
+  ON_SITE_PENDING: 'ON_SITE_PENDING',
+  TRANSFERRED_OUT: 'TRANSFERRED_OUT',
+  TRANSFERRED_IN: 'TRANSFERRED_IN',
+  CONSUMED: 'CONSUMED',
+  RETURNED_TO_SUPPLIER: 'RETURNED_TO_SUPPLIER',
+  SCRAPPED: 'SCRAPPED',
+  LOST: 'LOST',
+};
+
+// 库存流水变更类型
+const LEDGER_CHANGE_TYPE = {
+  INBOUND: 'INBOUND',
+  OUTBOUND: 'OUTBOUND',
+  TRANSFER_OUT: 'TRANSFER_OUT',
+  TRANSFER_IN: 'TRANSFER_IN',
+  RETURN: 'RETURN',
+  CONSUMED: 'CONSUMED',
+  SCRAP: 'SCRAP',
+  ADJUST: 'ADJUST',
+};
+
+// 附件病毒扫描状态
+const VIRUS_SCAN_STATUS = {
+  PENDING: 'PENDING',
+  CLEAN: 'CLEAN',
+  INFECTED: 'INFECTED',
+  FAILED: 'FAILED',
+};
+
+// 通知级别
+const NOTIFY_LEVEL = {
+  DING: 'DING',
+  WORK_NOTICE: 'WORK_NOTICE',
+  IN_APP: 'IN_APP',
+  EMAIL: 'EMAIL',
+};
+
+// 隐私级别
+const PRIVACY_LEVEL = {
+  PUBLIC: 'PUBLIC',
+  ORG: 'ORG',
+  DEPT: 'DEPT',
+  ASSIGNED: 'ASSIGNED',
+};
+
+// 处理动作类型
+const PROCESS_ACTION_TYPE = [
+  'COMMENT',
+  'UPLOAD_ATTACHMENT',
+  'ASSIGN',
+  'REQUEST_INFO',
+  'COMPLETE',
+  'ESCALATE',
+  'HOLD',
+  'RESUME',
+];
+
+// 流水号前缀
+const BIZ_NO_PREFIX = {
+  EVENT: 'LH',
+  MATERIAL_IN: 'RK',
+  MATERIAL_OUT: 'CK',
+  MATERIAL_TRANSFER: 'ZJ',
+  MATERIAL_RETURN: 'TK',
+  LEDGER: 'LS',
+};
+
+// 账号状态
+const ACCOUNT_STATUS = {
+  ACTIVE: 'ACTIVE',
+  DISABLED: 'DISABLED',
+  LEFT: 'LEFT',
+};
+
+// 成员状态
+const MEMBERSHIP_STATUS = {
+  ACTIVE: 'ACTIVE',
+  LEFT: 'LEFT',
+  REMOVED: 'REMOVED',
+};
+
+// DING 通知时间窗口（小时，24小时制）
+const DING_WINDOW = { start: 8, end: 22 };
+
+// 附件限制
+const ATTACHMENT_LIMITS = {
+  MAX_COUNT: 20,
+  MAX_SIZE_PER_FILE: 200 * 1024 * 1024, // 200MB
+  MAX_TOTAL_SIZE: 1024 * 1024 * 1024,   // 1GB
+  ALLOWED_MIMES: [
+    'image/jpeg', 'image/png', 'image/gif', 'image/webp',
+    'audio/mpeg', 'audio/mp4', 'audio/amr',
+    'video/mp4', 'video/3gpp',
+    'application/pdf',
+    'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    'application/zip', 'application/x-rar-compressed',
+  ],
+};
+
+// 归档保留天数
+const ARCHIVE_AUTO_DAYS = 7;
+
+// 审计日志类别
+const AUDIT_CATEGORY = {
+  OPERATION: 'OPERATION',
+  STATE: 'STATE',
+  DATA: 'DATA',
+  SYSTEM: 'SYSTEM',
+  SECURITY: 'SECURITY',
+};
+
+module.exports = {
+  EVENT_STATUS,
+  EVENT_TYPES,
+  APPROVAL_FLOW_STATUS,
+  APPROVAL_STEP_STATUS,
+  NODE_TYPE,
+  APPROVAL_MODE,
+  ASSIGNMENT_TYPE,
+  TIMEOUT_ACTION,
+  MAT_INVENTORY_STATUS,
+  LEDGER_CHANGE_TYPE,
+  VIRUS_SCAN_STATUS,
+  NOTIFY_LEVEL,
+  PRIVACY_LEVEL,
+  PROCESS_ACTION_TYPE,
+  BIZ_NO_PREFIX,
+  ACCOUNT_STATUS,
+  MEMBERSHIP_STATUS,
+  DING_WINDOW,
+  ATTACHMENT_LIMITS,
+  ARCHIVE_AUTO_DAYS,
+  AUDIT_CATEGORY,
+};

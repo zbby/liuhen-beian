@@ -1,13 +1,15 @@
 /**
  * utils/api.js
  * API 封装层 - 同时支持钉钉云函数调用和传统 HTTP 请求
- * 顶层导出 initCloud 和 cloud 对象
+ * 
+ * 云函数模式下，url 路径的第一段作为函数名，其余作为 path 传给函数
+ * 如 /auth/login → 函数名 auth, path /auth/login
+ * 如 /event/list → 函数名 event, path /event/list
+ * 如 /mat/inventory → 函数名 mat, path /mat/inventory
  */
 
 // ===== 钉钉小程序云初始化 =====
 function initCloud() {
-  // 钉钉小程序云 Serverless 初始化
-  // 实际环境中需要依赖 @alicloud/mpserverless-sdk
   try {
     if (typeof mpserverless !== 'undefined') {
       console.log('[api] 钉钉云 Serverless 已就绪');
@@ -19,14 +21,29 @@ function initCloud() {
   }
 }
 
+// ===== 从 URL 提取云函数名 =====
+function extractFunctionName(url) {
+  // /auth/login → auth
+  // /org/list → org
+  // /event/submit → event
+  // /approval/act → approval
+  // /mat/inventory → mat
+  // /classify/predict → classify
+  // /file/get-upload-token → file
+  // /notify/preferences → notify
+  // /audit/list → audit
+  const match = url.match(/^\/([a-z_-]+)/);
+  return match ? match[1] : '';
+}
+
 // ===== 通用请求封装 =====
 function request(options) {
   const app = getApp();
   const { url, method = 'GET', data = {} } = options;
 
-  // 云函数模式：通过 cloud.function.invoke 调用
+  // 云函数模式：通过 mpserverless.function.invoke 调用
   if (app.globalData.backendMode === 'cloud' && typeof mpserverless !== 'undefined') {
-    return invokeCloudFunction(url, data);
+    return invokeCloudFunction(url, method, data);
   }
 
   // HTTP 模式：传统 REST 请求
@@ -42,9 +59,25 @@ function request(options) {
 }
 
 // ===== 钉钉云函数调用 =====
-function invokeCloudFunction(funcName, data) {
+function invokeCloudFunction(url, method, data) {
+  const funcName = extractFunctionName(url);
+  if (!funcName) {
+    return Promise.reject({ message: `无法从 URL 提取云函数名: ${url}` });
+  }
+
   return new Promise((resolve, reject) => {
-    mpserverless.function.invoke(funcName, data, (err, res) => {
+    const params = {
+      path: url,
+      method,
+      body: method === 'POST' || method === 'PUT' ? data : undefined,
+      queryParameters: method === 'GET' ? data : undefined,
+      headers: {
+        'Authorization': getApp().globalData.userInfo
+          ? `Bearer ${getApp().globalData.userInfo.token || ''}` : ''
+      },
+    };
+
+    mpserverless.function.invoke(funcName, params, (err, res) => {
       if (err) {
         console.error(`[cloud] ${funcName} 调用失败:`, err);
         reject(err);
@@ -82,132 +115,84 @@ function httpRequest(options) {
 }
 
 // ===== API 接口定义 =====
+// 路径与后端云函数的路由一一对应
 const api = {
   // -- 认证 --
   auth: {
-    // 钉钉免登
     login: (authCode) => request({ url: '/auth/login', method: 'POST', data: { authCode } }),
-    // 获取用户信息
-    getUserInfo: () => request({ url: '/auth/userinfo' }),
-    // 切换组织
-    switchOrg: (orgId) => request({ url: '/auth/switch-org', method: 'POST', data: { orgId } })
+    refresh: (token) => request({ url: '/auth/refresh', method: 'POST', data: { token } }),
+    logout: () => request({ url: '/auth/logout', method: 'POST' }),
   },
 
   // -- 组织 --
   org: {
-    // 创建组织
+    list: () => request({ url: '/org/list' }),
     create: (orgData) => request({ url: '/org/create', method: 'POST', data: orgData }),
-    // 加入组织（邀请码）
-    join: (inviteCode) => request({ url: '/org/join', method: 'POST', data: { inviteCode } }),
-    // 获取组织信息
-    getInfo: () => request({ url: '/org/info' }),
-    // 获取成员列表
-    getMembers: (page = 1, size = 20) => request({ url: '/org/members', data: { page, size } }),
-    // 生成邀请码
-    genInviteCode: () => request({ url: '/org/invite-code', method: 'POST' }),
-    // 退出组织
-    leave: () => request({ url: '/org/leave', method: 'POST' })
+    joinByInvite: (inviteCode) => request({ url: '/org/join-by-invite', method: 'POST', data: { inviteCode } }),
+    getMembers: (orgId, page = 1, size = 20) => request({ url: '/org/members', data: { org_id: orgId, page, size } }),
+    leave: (orgId) => request({ url: '/org/leave', method: 'POST', data: { org_id: orgId } }),
   },
 
   // -- 事件 --
   event: {
-    // 创建事件
-    create: (eventData) => request({ url: '/event/create', method: 'POST', data: eventData }),
-    // 获取事件详情
-    getDetail: (eventId) => request({ url: `/event/${eventId}` }),
-    // 获取事件列表
-    getList: (params) => request({ url: '/event/list', data: params }),
-    // 获取我发起的
-    getMyEvents: (page = 1, size = 20) => request({ url: '/event/my', data: { page, size } }),
-    // 获取待审批
-    getPendingApprovals: (page = 1, size = 20) => request({ url: '/event/pending', data: { page, size } }),
-    // 获取历史（归档）
-    getHistory: (params) => request({ url: '/event/history', data: params }),
-    // 撤回事件
-    withdraw: (eventId) => request({ url: `/event/${eventId}/withdraw`, method: 'POST' }),
-    // 搜索事件
-    search: (keyword, page = 1) => request({ url: '/event/search', data: { keyword, page } })
+    typeList: () => request({ url: '/event/type-list' }),
+    submit: (eventData) => request({ url: '/event/submit', method: 'POST', data: eventData }),
+    list: (params) => request({ url: '/event/list', data: params }),
+    detail: (eventId) => request({ url: '/event/detail', data: { event_id: eventId } }),
+    cancel: (eventId) => request({ url: '/event/cancel', method: 'POST', data: { event_id: eventId } }),
+    process: (eventId, actionType, payload) => request({
+      url: '/event/process', method: 'POST', data: { event_id: eventId, action_type: actionType, payload }
+    }),
   },
 
-  // -- 附件 --
-  attachment: {
-    // 上传附件（钉钉云存储）
-    upload: (filePath, fileType) => request({
-      url: '/attachment/upload',
-      method: 'POST',
-      data: { filePath, fileType }
-    }),
-    // 获取附件下载链接
-    getUrl: (fileId) => request({ url: `/attachment/${fileId}/url` }),
-    // 删除附件
-    delete: (fileId) => request({ url: `/attachment/${fileId}`, method: 'DELETE' })
+  // -- 附件/文件 --
+  file: {
+    getUploadToken: (data) => request({ url: '/file/get-upload-token', method: 'POST', data }),
+    confirmUpload: (data) => request({ url: '/file/confirm-upload', method: 'POST', data }),
+    getDownloadUrl: (fileId) => request({ url: '/file/get-download-url', data: { file_id: fileId } }),
   },
 
   // -- 审批 --
   approval: {
-    // 提交审批意见
-    submit: (flowId, action, comment, extra) => request({
-      url: `/approval/${flowId}/submit`,
-      method: 'POST',
-      data: { action, comment, ...extra }
+    getTemplates: (orgId, eventType) => request({ url: '/approval/templates', data: { org_id: orgId, event_type: eventType } }),
+    getPending: (page = 1, size = 20) => request({ url: '/approval/pending', data: { page, size } }),
+    act: (flowId, action, comment, extra) => request({
+      url: '/approval/act', method: 'POST', data: { flow_id: flowId, action, comment, extra: extra || {} }
     }),
-    // 获取审批流详情
-    getFlow: (flowId) => request({ url: `/approval/${flowId}` }),
-    // 转办
-    transfer: (flowId, toUserId) => request({
-      url: `/approval/${flowId}/transfer`,
-      method: 'POST',
-      data: { toUserId }
+    addSigner: (flowId, userIds) => request({
+      url: '/approval/add-signer', method: 'POST', data: { flow_id: flowId, user_ids: userIds }
     }),
-    // 加签
-    addCounterSigner: (flowId, userIds) => request({
-      url: `/approval/${flowId}/add-signer`,
-      method: 'POST',
-      data: { userIds }
+  },
+
+  // -- 分类 --
+  classify: {
+    predict: (title, description, eventType) => request({
+      url: '/classify/predict', method: 'POST', data: { title, description, event_type: eventType }
     }),
-    // 获取审批模板列表
-    getTemplates: () => request({ url: '/approval/templates' })
   },
 
   // -- 通知 --
   notify: {
-    // 发送 Ding 通知
-    sendDing: (userIds, eventId) => request({
-      url: '/notify/ding',
-      method: 'POST',
-      data: { userIds, eventId }
+    getPreferences: (orgId) => request({ url: '/notify/preferences', data: { org_id: orgId } }),
+    updatePreferences: (orgId, updates) => request({
+      url: '/notify/preferences', method: 'PUT', data: { org_id: orgId, ...updates }
     }),
-    // 发送工作通知
-    sendWorkNotice: (userIds, content) => request({
-      url: '/notify/work',
-      method: 'POST',
-      data: { userIds, content }
-    })
   },
 
   // -- 甲供材 --
   material: {
-    // 仪表盘统计
-    getDashboard: () => request({ url: '/material/dashboard' }),
-    // 获取甲供材列表
-    getList: (params) => request({ url: '/material/list', data: params }),
-    // 入库
-    stockIn: (data) => request({ url: '/material/stock-in', method: 'POST', data }),
-    // 出库
-    stockOut: (data) => request({ url: '/material/stock-out', method: 'POST', data }),
-    // 转借
-    borrow: (data) => request({ url: '/material/borrow', method: 'POST', data }),
-    // 归还
-    return: (data) => request({ url: '/material/return', method: 'POST', data }),
-    // 获取流转记录
-    getFlowLog: (materialId) => request({ url: `/material/${materialId}/flow-log` })
+    getDashboard: (orgId) => request({ url: '/mat/report', data: { org_id: orgId } }),
+    getInventory: (params) => request({ url: '/mat/inventory', data: params }),
+    stockIn: (data) => request({ url: '/mat/stock-in', method: 'POST', data }),
+    stockOut: (data) => request({ url: '/mat/stock-out', method: 'POST', data }),
+    transfer: (data) => request({ url: '/mat/transfer', method: 'POST', data }),
+    returnMaterial: (data) => request({ url: '/mat/return', method: 'POST', data }),
   },
 
   // -- 审计 --
   audit: {
-    // 获取操作日志
-    getLogs: (params) => request({ url: '/audit/logs', data: params })
-  }
+    getLogs: (params) => request({ url: '/audit/list', data: params }),
+  },
 };
 
 module.exports = { initCloud, request, api };

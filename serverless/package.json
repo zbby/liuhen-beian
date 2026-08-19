@@ -1,0 +1,17 @@
+{
+  "name": "liuhen-beian-serverless",
+  "version": "1.0.0",
+  "description": "留痕备案 + 甲供材流转 - 钉钉小程序云 Serverless 后端",
+  "private": true,
+  "scripts": {
+    "deploy": "node scripts/deploy.js",
+    "init-db": "node scripts/init-db.js"
+  },
+  "dependencies": {
+    "@alicloud/mpserverless-sdk": "^1.0.0"
+  },
+  "devDependencies": {},
+  "engines": {
+    "node": ">=12.0.0"
+  }
+}
