@@ -1,0 +1,22 @@
+{
+  "format": 2,
+  "compileOptions": {
+    "component2": true,
+    "enableAppxNg": true,
+    "enableNodeModule": true
+  },
+  "projects": [
+    {
+      "name": "miniprogram",
+      "path": "miniprogram",
+      "type": "miniProgram"
+    },
+    {
+      "name": "serverless",
+      "path": "serverless",
+      "type": "cloudFunction"
+    }
+  ],
+  "cloudFunctionRoot": "serverless/functions",
+  "miniprogramRoot": "miniprogram/"
+}
