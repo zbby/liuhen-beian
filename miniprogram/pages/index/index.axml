@@ -1,0 +1,70 @@
+<!-- 首页 -->
+<view class="container">
+  <!-- 页面头部 -->
+  <view class="page-header">
+    <view>
+      <view class="page-title">留痕备案</view>
+      <view class="page-subtitle">安全合规 · 全程留痕</view>
+    </view>
+  </view>
+
+  <!-- 统计卡片 -->
+  <view class="stats-section">
+    <view class="stat-item">
+      <text class="stat-value">{{pendingCount}}</text>
+      <text class="stat-label">待办事项</text>
+    </view>
+    <view class="stat-item">
+      <text class="stat-value">{{approvalCount}}</text>
+      <text class="stat-label">待我审批</text>
+    </view>
+    <view class="stat-item">
+      <text class="stat-value">{{completedCount}}</text>
+      <text class="stat-label">已完结</text>
+    </view>
+  </view>
+
+  <!-- 快捷操作 -->
+  <view class="quick-actions">
+    <view class="quick-action" onTap="goToCreate">
+      <view class="quick-action-icon">+</view>
+      <text class="quick-action-text">发起备案</text>
+    </view>
+    <view class="quick-action" onTap="goToApproval">
+      <view class="quick-action-icon">✓</view>
+      <text class="quick-action-text">审批</text>
+    </view>
+    <view class="quick-action" onTap="goToHistory">
+      <view class="quick-action-icon">📋</view>
+      <text class="quick-action-text">历史</text>
+    </view>
+  </view>
+
+  <!-- 进行中事件 -->
+  <view class="section-title">
+    <text>进行中事件</text>
+    <text class="section-more" onTap="viewAll">查看全部 ></text>
+  </view>
+  
+  <view class="event-list">
+    <view class="event-item" a:for="{{eventList}}" a:key="id" onTap="goToDetail" data-id="{{item.id}}">
+      <view class="event-left">
+        <view class="event-category" style="background-color: {{item.categoryColor}}"></view>
+      </view>
+      <view class="event-content">
+        <view class="event-title">{{item.title}}</view>
+        <view class="event-desc">{{item.description}}</view>
+        <view class="event-footer">
+          <text class="event-time">{{item.createTime}}</text>
+          <text class="event-status tag tag-{{item.status}}">{{item.statusText}}</text>
+        </view>
+      </view>
+    </view>
+    
+    <!-- 空状态 -->
+    <view class="empty-state" a:if="{{eventList.length === 0}}">
+      <text class="empty-state-icon">📝</text>
+      <text class="empty-state-text">暂无进行中事件</text>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,16 @@
+# 钉钉小程序开发者工具缓存
+.tea/
+
+# 依赖
+node_modules/
+
+# 系统文件
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# 钉钉官方示例模板（非项目核心代码）
+留痕报备/

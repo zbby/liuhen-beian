@@ -1,0 +1,158 @@
+/* 首页样式 */
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 32rpx 24rpx;
+  background-color: #1890FF;
+  color: #FFFFFF;
+}
+
+.page-title {
+  font-size: 36rpx;
+  font-weight: 600;
+}
+
+.page-subtitle {
+  font-size: 26rpx;
+  opacity: 0.9;
+}
+
+.stats-section {
+  display: flex;
+  padding: 24rpx;
+  background-color: #FFFFFF;
+  margin-bottom: 24rpx;
+}
+
+.stat-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stat-value {
+  font-size: 48rpx;
+  font-weight: 600;
+  color: #1890FF;
+}
+
+.stat-label {
+  font-size: 26rpx;
+  color: #999999;
+  margin-top: 8rpx;
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333333;
+  padding: 24rpx 24rpx 16rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.section-more {
+  font-size: 26rpx;
+  color: #1890FF;
+  font-weight: 400;
+}
+
+.event-list {
+  background-color: #FFFFFF;
+}
+
+.event-item {
+  display: flex;
+  padding: 24rpx;
+  border-bottom: 1rpx solid #F0F0F0;
+}
+
+.event-item:last-child {
+  border-bottom: none;
+}
+
+.event-left {
+  margin-right: 24rpx;
+}
+
+.event-category {
+  width: 8rpx;
+  height: 80rpx;
+  border-radius: 4rpx;
+  background-color: #1890FF;
+}
+
+.event-content {
+  flex: 1;
+}
+
+.event-title {
+  font-size: 30rpx;
+  font-weight: 500;
+  color: #333333;
+  margin-bottom: 12rpx;
+}
+
+.event-desc {
+  font-size: 26rpx;
+  color: #999999;
+  margin-bottom: 12rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.event-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.event-time {
+  font-size: 24rpx;
+  color: #999999;
+}
+
+.event-status {
+  font-size: 24rpx;
+  padding: 4rpx 12rpx;
+  border-radius: 4rpx;
+}
+
+.quick-actions {
+  display: flex;
+  padding: 24rpx;
+  background-color: #FFFFFF;
+  margin-top: 24rpx;
+}
+
+.quick-action {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24rpx 0;
+}
+
+.quick-action-icon {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 20rpx;
+  background-color: #1890FF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40rpx;
+  color: #FFFFFF;
+  margin-bottom: 16rpx;
+}
+
+.quick-action-text {
+  font-size: 26rpx;
+  color: #333333;
+}

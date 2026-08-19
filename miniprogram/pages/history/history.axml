@@ -1,0 +1,57 @@
+<!-- 历史记录 -->
+<view class="container">
+  <view class="page-header">
+    <text class="page-title">历史记录</text>
+    <text class="page-subtitle">已完结的备案事件</text>
+  </view>
+
+  <!-- 筛选栏 -->
+  <view class="filter-bar">
+    <view 
+      class="filter-item {{filterType === 'all' ? 'active' : ''}}"
+      onTap="setFilter"
+      data-type="all"
+    >全部</view>
+    <view 
+      class="filter-item {{filterType === 'completed' ? 'active' : ''}}"
+      onTap="setFilter"
+      data-type="completed"
+    >已完成</view>
+    <view 
+      class="filter-item {{filterType === 'rejected' ? 'active' : ''}}"
+      onTap="setFilter"
+      data-type="rejected"
+    >已驳回</view>
+  </view>
+
+  <view class="history-list">
+    <view 
+      class="history-item"
+      a:for="{{historyList}}"
+      a:key="id"
+      onTap="goToDetail"
+      data-id="{{item.id}}"
+    >
+      <view class="history-left">
+        <view class="history-category" style="background-color: {{item.categoryColor}}"></view>
+      </view>
+      <view class="history-content">
+        <view class="history-title">{{item.title}}</view>
+        <view class="history-desc">{{item.description}}</view>
+        <view class="history-footer">
+          <view class="history-meta">
+            <text>发起人：{{item.creator}}</text>
+            <text>完结：{{item.completeTime}}</text>
+          </view>
+          <view class="history-status tag tag-{{item.status}}">{{item.statusText}}</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 空状态 -->
+    <view class="empty-state" a:if="{{historyList.length === 0}}">
+      <text class="empty-state-icon">📋</text>
+      <text class="empty-state-text">暂无历史记录</text>
+    </view>
+  </view>
+</view>

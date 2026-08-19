@@ -1,0 +1,194 @@
+/* 全局样式 */
+page {
+  background-color: #F5F5F5;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-size: 28rpx;
+  color: #333333;
+}
+
+.container {
+  padding: 24rpx;
+}
+
+/* 卡片样式 */
+.card {
+  background-color: #FFFFFF;
+  border-radius: 12rpx;
+  padding: 24rpx;
+  margin-bottom: 24rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.06);
+}
+
+.card-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333333;
+  margin-bottom: 16rpx;
+}
+
+.card-subtitle {
+  font-size: 26rpx;
+  color: #999999;
+  margin-bottom: 24rpx;
+}
+
+/* 按钮样式 */
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 88rpx;
+  border-radius: 44rpx;
+  font-size: 30rpx;
+  font-weight: 500;
+}
+
+.btn-primary {
+  background-color: #1890FF;
+  color: #FFFFFF;
+}
+
+.btn-primary:active {
+  background-color: #096dd9;
+}
+
+.btn-default {
+  background-color: #FFFFFF;
+  color: #1890FF;
+  border: 1rpx solid #1890FF;
+}
+
+.btn-default:active {
+  background-color: #f0f5ff;
+}
+
+.btn-block {
+  width: 100%;
+}
+
+/* 表单样式 */
+.form-group {
+  margin-bottom: 32rpx;
+}
+
+.form-label {
+  font-size: 28rpx;
+  font-weight: 500;
+  color: #333333;
+  margin-bottom: 16rpx;
+}
+
+.form-input {
+  height: 88rpx;
+  background-color: #FFFFFF;
+  border-radius: 8rpx;
+  padding: 0 24rpx;
+  font-size: 28rpx;
+  border: 1rpx solid #E8E8E8;
+}
+
+.form-textarea {
+  background-color: #FFFFFF;
+  border-radius: 8rpx;
+  padding: 24rpx;
+  font-size: 28rpx;
+  border: 1rpx solid #E8E8E8;
+  min-height: 200rpx;
+}
+
+/* 列表样式 */
+.list-item {
+  display: flex;
+  align-items: center;
+  padding: 24rpx 0;
+  border-bottom: 1rpx solid #F0F0F0;
+}
+
+.list-item:last-child {
+  border-bottom: none;
+}
+
+.list-item-icon {
+  width: 48rpx;
+  height: 48rpx;
+  border-radius: 8rpx;
+  margin-right: 24rpx;
+  background-color: #1890FF;
+}
+
+.list-item-content {
+  flex: 1;
+}
+
+.list-item-title {
+  font-size: 30rpx;
+  font-weight: 500;
+  color: #333333;
+  margin-bottom: 8rpx;
+}
+
+.list-item-desc {
+  font-size: 26rpx;
+  color: #999999;
+}
+
+.list-item-arrow {
+  color: #999999;
+  font-size: 32rpx;
+}
+
+/* 状态标签 */
+.tag {
+  display: inline-block;
+  padding: 4rpx 16rpx;
+  border-radius: 4rpx;
+  font-size: 24rpx;
+}
+
+.tag-processing {
+  background-color: #e6f7ff;
+  color: #1890FF;
+}
+
+.tag-completed {
+  background-color: #f6ffed;
+  color: #52c41a;
+}
+
+.tag-pending {
+  background-color: #fff7e6;
+  color: #fa8c16;
+}
+
+.tag-rejected {
+  background-color: #fff1f0;
+  color: #f5222d;
+}
+
+/* 空状态 */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 100rpx 0;
+}
+
+.empty-state-icon {
+  font-size: 120rpx;
+  color: #D9D9D9;
+  margin-bottom: 24rpx;
+}
+
+.empty-state-text {
+  font-size: 28rpx;
+  color: #999999;
+}
+
+/* 加载状态 */
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40rpx 0;
+}

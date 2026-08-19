@@ -1,0 +1,101 @@
+<!-- 事件详情 -->
+<view class="container">
+  <!-- 头部状态卡片 -->
+  <view class="header-card">
+    <view class="status-badge tag tag-{{event.status}}">{{event.statusText}}</view>
+    <view class="event-title">{{event.title}}</view>
+    <view class="event-meta">
+      <text>发起人：{{event.creator}}</text>
+      <text>时间：{{event.createTime}}</text>
+    </view>
+  </view>
+
+  <!-- 事件描述 -->
+  <view class="section">
+    <view class="section-title">事件描述</view>
+    <view class="section-content">
+      {{event.description}}
+    </view>
+  </view>
+
+  <!-- 附件列表 -->
+  <view class="section" a:if="{{event.attachments && event.attachments.length > 0}}">
+    <view class="section-title">附件 ({{event.attachments.length}})</view>
+    <view class="attachment-list">
+      <view 
+        class="attachment-item"
+        a:for="{{event.attachments}}"
+        a:key="index"
+        onTap="previewAttachment"
+        data-index="{{index}}"
+      >
+        <image class="attachment-thumb" src="{{item}}" mode="aspectFill" />
+      </view>
+    </view>
+  </view>
+
+  <!-- 审批流程 -->
+  <view class="section">
+    <view class="section-title">审批流程</view>
+    <view class="approval-mode-tag">
+      模式：{{event.approvalModeText}}
+    </view>
+    
+    <view class="timeline">
+      <view 
+        class="timeline-item {{item.completed ? 'completed' : ''}}"
+        a:for="{{event.approvalFlow}}"
+        a:key="index"
+      >
+        <view class="timeline-dot"></view>
+        <view class="timeline-content">
+          <view class="timeline-title">{{item.approverName}}</view>
+          <view class="timeline-role">{{item.role}}</view>
+          <view class="timeline-status">{{item.statusText}}</view>
+          <view class="timeline-time" a:if="{{item.time}}">{{item.time}}</view>
+          <view class="timeline-comment" a:if="{{item.comment}}">
+            意见：{{item.comment}}
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 通知人员 -->
+  <view class="section" a:if="{{event.notifyUsers && event.notifyUsers.length > 0}}">
+    <view class="section-title">通知人员</view>
+    <view class="notify-list">
+      <view 
+        class="notify-item"
+        a:for="{{event.notifyUsers}}"
+        a:key="index"
+      >
+        <text>{{item.name}}</text>
+        <text class="notify-status {{item.notified ? 'notified' : ''}}">
+          {{item.notified ? '已通知' : '未通知'}}
+        </text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 操作日志 -->
+  <view class="section">
+    <view class="section-title">操作日志</view>
+    <view class="log-list">
+      <view 
+        class="log-item"
+        a:for="{{event.logs}}"
+        a:key="index"
+      >
+        <view class="log-time">{{item.time}}</view>
+        <view class="log-content">{{item.content}}</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部操作栏 -->
+  <view class="action-bar" a:if="{{canApprove}}">
+    <button class="btn btn-default" onTap="rejectEvent">驳回</button>
+    <button class="btn btn-primary" onTap="approveEvent">同意</button>
+  </view>
+</view>

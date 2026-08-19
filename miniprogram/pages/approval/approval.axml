@@ -1,0 +1,39 @@
+<!-- 审批列表 -->
+<view class="container">
+  <view class="page-header">
+    <text class="page-title">待我审批</text>
+    <text class="page-subtitle">需要您处理的事件</text>
+  </view>
+
+  <view class="approval-list">
+    <view 
+      class="approval-item"
+      a:for="{{approvalList}}"
+      a:key="id"
+      onTap="goToDetail"
+      data-id="{{item.id}}"
+    >
+      <view class="approval-left">
+        <view class="approval-category" style="background-color: {{item.categoryColor}}"></view>
+      </view>
+      <view class="approval-content">
+        <view class="approval-title">{{item.title}}</view>
+        <view class="approval-desc">{{item.description}}</view>
+        <view class="approval-footer">
+          <view class="approval-meta">
+            <text>发起人：{{item.creator}}</text>
+            <text>时间：{{item.createTime}}</text>
+          </view>
+          <view class="approval-mode tag">{{item.approvalModeText}}</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 空状态 -->
+    <view class="empty-state" a:if="{{approvalList.length === 0}}">
+      <text class="empty-state-icon">✅</text>
+      <text class="empty-state-text">暂无待审批事件</text>
+      <text class="empty-state-hint">所有审批已处理完成</text>
+    </view>
+  </view>
+</view>
