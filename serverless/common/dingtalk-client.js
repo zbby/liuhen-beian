@@ -9,12 +9,11 @@
 const https = require('https');
 const http = require('http');
 
-// 钉钉应用凭证（从环境变量或初始化注入）
+// 钉钉应用凭证（从环境变量或初始化注入，兼容两种命名）
 const DINGTALK_API_BASE = 'https://oapi.dingtalk.com';
 const DINGTALK_API_NEW = 'https://api.dingtalk.com';
-
-let _appKey = process.env.DINGTALK_APP_KEY || '';
-let _appSecret = process.env.DINGTALK_APP_SECRET || '';
+let _appKey = process.env.DINGTALK_APP_KEY || process.env.DINGTALK_CLIENT_ID || '';
+let _appSecret = process.env.DINGTALK_APP_SECRET || process.env.DINGTALK_CLIENT_SECRET || '';
 let _agentId = process.env.DINGTALK_AGENT_ID || '';
 let _accessTokenCache = {
   token: '',

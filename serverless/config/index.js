@@ -7,13 +7,13 @@ module.exports = {
   // 服务端口
   port: process.env.PORT || 3000,
 
-  // MongoDB 连接
-  mongoUri: process.env.MONGO_URI || 'mongodb://localhost:27017/liuhen_beian',
+  // MongoDB 连接（同时兼容 MONGODB_URI 和 MONGO_URI）
+  mongoUri: process.env.MONGODB_URI || process.env.MONGO_URI || 'mongodb://localhost:27017/liuhen-beian',
 
-  // 钉钉应用凭证
+  // 钉钉应用凭证（同时兼容 DINGTALK_CLIENT_ID/SECRET 和 DINGTALK_APP_KEY/SECRET）
   dingtalk: {
-    appKey: process.env.DINGTALK_APP_KEY || 'dingb4uqplxslldd9uaa',
-    appSecret: process.env.DINGTALK_APP_SECRET || '',
+    appKey: process.env.DINGTALK_APP_KEY || process.env.DINGTALK_CLIENT_ID || 'dingb4uqplxslldd9uaa',
+    appSecret: process.env.DINGTALK_APP_SECRET || process.env.DINGTALK_CLIENT_SECRET || '',
     agentId: process.env.DINGTALK_AGENT_ID || '4598010509',
     apiBase: 'https://oapi.dingtalk.com',
     apiNew: 'https://api.dingtalk.com',

@@ -21,6 +21,7 @@ const fileRoutes = require('./routes/file');
 const notifyRoutes = require('./routes/notify');
 const auditRoutes = require('./routes/audit');
 const matRoutes = require('./routes/mat');
+const callbackRoutes = require('./routes/callback');
 
 const app = express();
 
@@ -50,6 +51,7 @@ app.use('/api/file', fileRoutes);
 app.use('/api/notify', notifyRoutes);
 app.use('/api/audit', auditRoutes);
 app.use('/api/mat', matRoutes);
+app.use('/api/callback', callbackRoutes);
 
 // ===== 404 =====
 app.use((req, res) => {
@@ -77,8 +79,8 @@ async function start() {
   // 启动 HTTP 服务
   app.listen(config.port, '0.0.0.0', () => {
     console.log(`[留痕备案] 后端服务已启动: http://0.0.0.0:${config.port}`);
-    console.log(`[留痕备案] API 基础路径: http://8.147.61.234:${config.port}/api`);
-    console.log(`[留痕备案] 健康检查: http://8.147.61.234:${config.port}/api/health`);
+    console.log(`[留痕备案] API 基础路径: https://zhangbaoyu.site/api`);
+    console.log(`[留痕备案] 健康检查: https://zhangbaoyu.site/api/health`);
   });
 }
 
