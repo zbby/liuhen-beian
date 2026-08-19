@@ -10,9 +10,8 @@ App({
     agentId: '4598010509',
 
     // ===== 后端模式 =====
-    // 'cloud' = 钉钉小程序云 Serverless（云函数 + 云数据库 + 云存储）
-    // 'http'  = 传统 HTTP 后端（部署在 ECS）
-    backendMode: 'cloud',
+    // 'http' = 传统 HTTP 后端（部署在 ECS 8.147.61.234:3000）
+    backendMode: 'http',
     apiBaseUrl: 'http://8.147.61.234:3000/api',
 
     // ===== 用户与组织信息（免登后填充）=====
