@@ -27,38 +27,34 @@ router.post('/login', asyncHandler(async (req, res) => {
     throw new BizError(ERROR_CODES.AUTH_CODE_INVALID, 'authCode 不能为空');
   }
 
-  // 1. 调钉钉接口换取用户信息
+  // 1. 调钉钉新版接口换取用户信息（authCode → userAccessToken → 用户信息）
   const dingUser = await dingtalk.getUserInfoByCode(authCode);
-  if (!dingUser || !dingUser.result) {
+  if (!dingUser || !dingUser.result || !dingUser.result.union_id) {
     throw new BizError(ERROR_CODES.DINGTALK_API_ERROR, '钉钉免登失败', dingUser);
   }
 
-  const { userid: dingUserId, union_id: unionId } = dingUser.result;
+  const { userid: dingUserId, union_id: unionId, name, avatar, mobile, corp_id } = dingUser.result;
 
-  // 2. 获取用户详情
-  const dingDetail = await dingtalk.getUserDetail(dingUserId);
-  const userInfo = dingDetail.result || {};
-
-  // 3. 创建或更新平台账号
+  // 2. 创建或更新平台账号
   const { maskMobile, encryptMobile, nowISO } = require('../../common/utils/helper');
   const accountId = await dao.account.upsertByUnionId(unionId, {
-    ding_user_id: dingUserId,
-    name: userInfo.name || '',
-    avatar: userInfo.avatar || '',
-    corp_id: userInfo.corp_id || '',
-    mobile_masked: maskMobile(userInfo.mobile || ''),
-    mobile_encrypted: encryptMobile(userInfo.mobile || ''),
+    ding_user_id: dingUserId || unionId,
+    name: name || '',
+    avatar: avatar || '',
+    corp_id: corp_id || '',
+    mobile_masked: maskMobile(mobile || ''),
+    mobile_encrypted: encryptMobile(mobile || ''),
     updated_at: nowISO(),
   });
 
-  // 4. 查询用户所属组织
+  // 3. 查询用户所属组织
   const memberships = await dao.membership.findByAccount(accountId, 'ACTIVE');
 
-  // 5. 签发 JWT
+  // 4. 签发 JWT
   const token = jwt.sign(
     {
       account_id: accountId,
-      ding_user_id: dingUserId,
+      ding_user_id: dingUserId || unionId,
       union_id: unionId,
       roles: memberships.length > 0 ? memberships[0].roles : [],
       org_id: memberships.length > 0 ? memberships[0].org_id : null,
@@ -71,9 +67,9 @@ router.post('/login', asyncHandler(async (req, res) => {
     sessionToken: token,
     account: {
       id: accountId,
-      name: userInfo.name,
-      avatar: userInfo.avatar,
-      mobile: maskMobile(userInfo.mobile || ''),
+      name: name,
+      avatar: avatar,
+      mobile: maskMobile(mobile || ''),
     },
     orgs: memberships.map((m) => ({
       org_id: m.org_id,

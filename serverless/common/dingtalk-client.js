@@ -108,14 +108,45 @@ async function getUserInfo(authCode) {
 }
 
 /**
- * 通过 authCode 获取用户信息（新版接口，推荐）
+ * 通过 authCode 换取用户信息（新版接口）
+ * 步骤1: 用 authCode 换 userAccessToken
+ * 步骤2: 用 userAccessToken 获取用户信息
  */
 async function getUserInfoByCode(authCode) {
-  return httpRequest(
-    `${DINGTALK_API_NEW}/v1.0/oauth2/userinfo`,
+  // Step 1: 获取用户级 accessToken
+  const tokenRes = await httpRequest(
+    `${DINGTALK_API_NEW}/v1.0/oauth2/userAccessToken`,
     'POST',
-    { authCode }
+    {
+      clientId: _appKey,
+      clientSecret: _appSecret,
+      code: authCode,
+      grantType: 'authorization_code',
+    }
   );
+
+  if (!tokenRes || !tokenRes.accessToken) {
+    throw new Error(`钉钉获取用户令牌失败: ${JSON.stringify(tokenRes)}`);
+  }
+
+  // Step 2: 用用户令牌获取用户信息
+  const userRes = await httpRequest(
+    `${DINGTALK_API_NEW}/v1.0/contact/users/me`,
+    'GET',
+    null,
+    { 'x-acs-dingtalk-access-token': tokenRes.accessToken }
+  );
+
+  return {
+    result: {
+      userid: userRes.unionId || userRes.openId,
+      union_id: userRes.unionId,
+      name: userRes.nick || userRes.name || '',
+      avatar: userRes.avatarUrl || '',
+      mobile: userRes.mobile || '',
+      corp_id: userRes.corpId || '',
+    },
+  };
 }
 
 /**
