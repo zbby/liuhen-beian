@@ -12,7 +12,7 @@ App({
     // ===== 后端模式 =====
     // 'http' = 传统 HTTP 后端（部署在 ECS 8.147.61.234:3000）
     backendMode: 'http',
-    apiBaseUrl: 'http://8.147.61.234:3000/api',
+    apiBaseUrl: 'https://zhangbaoyu.site/api',
 
     // ===== 用户与组织信息（免登后填充）=====
     userInfo: null,       // { userId, name, avatar, phone, deptId, deptName }

@@ -107,7 +107,7 @@ function logout() {
  * 是否开发模式（未连接云函数时降级）
  */
 function isDevMode() {
-  return true; // TODO: 上线前改为 false
+  return false;
 }
 
 module.exports = { login, ensureLogin, checkOrg, logout, isDevMode };
