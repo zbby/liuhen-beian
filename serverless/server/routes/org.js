@@ -42,4 +42,15 @@ router.post('/leave', asyncHandler(async (req, res) => {
   return await orgService.leave(req.currentUser.account_id, req.body.org_id);
 }));
 
+// POST /api/org/gen-invite-code — 生成邀请码（复用 org_code）
+router.post('/gen-invite-code', asyncHandler(async (req, res) => {
+  const orgs = await orgService.listMyOrgs(req.currentUser.account_id);
+  if (!orgs || orgs.length === 0) {
+    const { BizError, ERROR_CODES } = require('../../common/utils/errors');
+    throw new BizError(ERROR_CODES.ORG_NOT_FOUND, '您尚未加入任何组织');
+  }
+  // 返回第一个组织的 org_code 作为邀请码
+  return { code: orgs[0].org_code, expireDays: 7 };
+}));
+
 module.exports = router;

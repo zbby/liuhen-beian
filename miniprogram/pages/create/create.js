@@ -291,7 +291,7 @@ Page({
       };
 
       // 调用后端创建事件
-      const result = await api.event.create(eventData);
+      const result = await api.event.submit(eventData);
 
       my.hideLoading();
 

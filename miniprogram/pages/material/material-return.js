@@ -31,7 +31,7 @@ Page({
     }
     this.setData({ submitting: true }); my.showLoading({ content: '提交中...' });
     try {
-      await api.material.return(this.data.form);
+      await api.material.returnMaterial(this.data.form);
       my.hideLoading(); my.showToast({ content: '归还成功', duration: 1500 });
       setTimeout(() => my.navigateBack(), 1500);
     } catch (err) {

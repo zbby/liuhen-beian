@@ -99,7 +99,7 @@ Page({
     my.showLoading({ content: '加入中...' });
 
     try {
-      const orgData = await api.org.join(this.data.inviteCode.trim());
+      const orgData = await api.org.joinByInvite(this.data.inviteCode.trim());
       const app = getApp();
       app.saveOrgInfo(orgData);
 

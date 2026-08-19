@@ -24,7 +24,7 @@ Page({
   async loadData() {
     this.setData({ loading: true });
     try {
-      const list = await api.event.getPendingApprovals(1, 50);
+      const list = await api.approval.getPending(1, 50);
       this.setData({
         approvalList: (list.list || []).map(e => this.formatEvent(e)),
         loading: false

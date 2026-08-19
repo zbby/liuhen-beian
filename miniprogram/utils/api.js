@@ -131,6 +131,7 @@ const api = {
     joinByInvite: (inviteCode) => request({ url: '/org/join-by-invite', method: 'POST', data: { inviteCode } }),
     getMembers: (orgId, page = 1, size = 20) => request({ url: '/org/members', data: { org_id: orgId, page, size } }),
     leave: (orgId) => request({ url: '/org/leave', method: 'POST', data: { org_id: orgId } }),
+    genInviteCode: () => request({ url: '/org/gen-invite-code', method: 'POST' }),
   },
 
   // -- 事件 --

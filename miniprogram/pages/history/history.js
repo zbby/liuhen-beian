@@ -39,7 +39,7 @@ Page({
         page: 1,
         size: 50
       };
-      const result = await api.event.getHistory(params);
+      const result = await api.event.list(params);
       const list = (result.list || []).map(e => this.formatEvent(e));
       this.setData({ historyList: list, loading: false });
     } catch (err) {

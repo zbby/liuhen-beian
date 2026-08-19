@@ -22,7 +22,7 @@ Page({
   async loadDetail(eventId) {
     this.setData({ loading: true });
     try {
-      const event = await api.event.getDetail(eventId);
+      const event = await api.event.detail(eventId);
       this.setData({ event: this.formatEvent(event), loading: false });
       this.checkPermissions();
     } catch (err) {
@@ -167,7 +167,7 @@ Page({
   async submitApproval(action, comment, extra = {}) {
     my.showLoading({ content: '处理中...' });
     try {
-      await api.approval.submit(this.data.event.approvalFlowId || this.data.eventId, action, comment, extra);
+      await api.approval.act(this.data.event.approvalFlowId || this.data.eventId, action, comment, extra);
       my.hideLoading();
       my.showToast({ content: action === 'agree' ? '已同意' : action === 'reject' ? '已驳回' : '已转办', duration: 1500 });
       this.loadDetail(this.data.eventId);
@@ -189,7 +189,7 @@ Page({
         if (res.confirm) {
           my.showLoading({ content: '撤回中...' });
           try {
-            await api.event.withdraw(this.data.eventId);
+            await api.event.cancel(this.data.eventId);
             my.hideLoading();
             my.showToast({ content: '已撤回', duration: 1500 });
             setTimeout(() => my.navigateBack(), 1500);

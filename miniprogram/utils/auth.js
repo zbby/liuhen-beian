@@ -85,7 +85,8 @@ function checkOrg() {
     return Promise.resolve(app.globalData.orgInfo);
   }
   // 尝试从后端获取
-  return api.org.getInfo().then((org) => {
+  return api.org.list().then((orgs) => {
+    const org = orgs && orgs.length > 0 ? orgs[0] : null;
     if (org) {
       app.saveOrgInfo(org);
       return org;

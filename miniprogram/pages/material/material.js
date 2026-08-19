@@ -24,7 +24,7 @@ Page({
 
   async loadData() {
     try {
-      const dashboard = await api.material.getDashboard();
+      const dashboard = await api.material.getDashboard(getApp().globalData.orgInfo?.org_id || getApp().globalData.userInfo?.org_id);
       this.setData({ stats: dashboard.stats, recentLogs: dashboard.recentLogs });
     } catch (err) {
       console.error('加载仪表盘失败:', err);

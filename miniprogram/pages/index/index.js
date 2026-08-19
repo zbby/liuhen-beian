@@ -58,9 +58,9 @@ Page({
     this.setData({ refreshing: false });
     try {
       const [pending, approvals, completed] = await Promise.all([
-        api.event.getMyEvents(1, 5).catch(() => this.mockEvents('pending')),
-        api.event.getPendingApprovals(1, 5).catch(() => this.mockEvents('approval')),
-        api.event.getHistory({ page: 1, size: 1 }).catch(() => ({ total: 0 }))
+        api.event.list({ page: 1, size: 5 }).catch(() => this.mockEvents('pending')),
+        api.approval.getPending(1, 5).catch(() => this.mockEvents('approval')),
+        api.event.list({ page: 1, size: 1, status: 'completed,archived' }).catch(() => ({ total: 0 }))
       ]);
 
       const eventList = (pending.list || pending || []).map(e => this.formatEvent(e));
