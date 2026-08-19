@@ -1,4 +1,4 @@
-/**
+﻿/**
  * server/routes/approval.js
  * 审批路由 — 模板/待办/审批动作/加签
  */
@@ -7,7 +7,7 @@ const express = require('express');
 const router = express.Router();
 const { asyncHandler } = require('../middleware/response');
 const { authRequired } = require('../middleware/auth');
-const { ApprovalService } = require('../../common/services/approval-service');
+const ApprovalService = require('../../common/services/approval-service');
 const dao = require('../dao-context');
 
 const approvalService = new ApprovalService(dao);

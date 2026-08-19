@@ -1,4 +1,4 @@
-/**
+﻿/**
  * server/routes/event.js
  * 事件路由 — 提交/详情/列表/撤回/处理
  */
@@ -7,9 +7,9 @@ const express = require('express');
 const router = express.Router();
 const { asyncHandler } = require('../middleware/response');
 const { authRequired } = require('../middleware/auth');
-const { EventService } = require('../../common/services/event-service');
-const { ApprovalService } = require('../../common/services/approval-service');
-const { NotifyService } = require('../../common/services/notify-service');
+const EventService = require('../../common/services/event-service');
+const ApprovalService = require('../../common/services/approval-service');
+const NotifyService = require('../../common/services/notify-service');
 const dao = require('../dao-context');
 
 const eventService = new EventService(dao);

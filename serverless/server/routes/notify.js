@@ -1,4 +1,4 @@
-/**
+﻿/**
  * server/routes/notify.js
  * 通知路由 — 偏好管理
  */
@@ -7,7 +7,7 @@ const express = require('express');
 const router = express.Router();
 const { asyncHandler } = require('../middleware/response');
 const { authRequired } = require('../middleware/auth');
-const { NotifyService } = require('../../common/services/notify-service');
+const NotifyService = require('../../common/services/notify-service');
 const dao = require('../dao-context');
 
 const notifyService = new NotifyService(dao);

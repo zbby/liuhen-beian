@@ -1,4 +1,4 @@
-/**
+﻿/**
  * server/routes/mat.js
  * 甲供材路由 — 仪表盘/库存/入库/出库/转借/退库
  */
@@ -7,7 +7,7 @@ const express = require('express');
 const router = express.Router();
 const { asyncHandler } = require('../middleware/response');
 const { authRequired } = require('../middleware/auth');
-const { MaterialService } = require('../../common/services/material-service');
+const MaterialService = require('../../common/services/material-service');
 const dao = require('../dao-context');
 
 const materialService = new MaterialService(dao);

@@ -7,7 +7,7 @@ const express = require('express');
 const router = express.Router();
 const { asyncHandler } = require('../middleware/response');
 const { authRequired } = require('../middleware/auth');
-const { OrgService } = require('../../common/services/org-service');
+const OrgService = require('../../common/services/org-service');
 const dao = require('../dao-context');
 
 const orgService = new OrgService(dao);
