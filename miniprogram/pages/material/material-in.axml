@@ -1,0 +1,63 @@
+<!-- 甲供材入库登记 -->
+<view class="container">
+  <view class="brand-header">
+    <text class="brand-title">入库登记</text>
+    <text class="brand-subtitle">到货接收、入库验收</text>
+  </view>
+
+  <view class="card">
+    <view class="form-group">
+      <view class="form-label">材料名称<span class="required">*</span></view>
+      <input class="form-input" placeholder="如：G.652D 光缆 48 芯" value="{{form.materialName}}" onInput="onInput" data-field="materialName" />
+    </view>
+    <view class="form-group">
+      <view class="form-label">规格型号</view>
+      <input class="form-input" placeholder="规格型号" value="{{form.spec}}" onInput="onInput" data-field="spec" />
+    </view>
+    <view class="form-group">
+      <view class="form-label">数量<span class="required">*</span></view>
+      <input class="form-input" type="number" placeholder="数量" value="{{form.quantity}}" onInput="onInput" data-field="quantity" />
+    </view>
+    <view class="form-group">
+      <view class="form-label">单位</view>
+      <input class="form-input" placeholder="如：公里/台/个" value="{{form.unit}}" onInput="onInput" data-field="unit" />
+    </view>
+    <view class="form-group">
+      <view class="form-label">供应商</view>
+      <input class="form-input" placeholder="供应商" value="{{form.supplier}}" onInput="onInput" data-field="supplier" />
+    </view>
+    <view class="form-group">
+      <view class="form-label">所属项目</view>
+      <input class="form-input" placeholder="项目名称" value="{{form.projectName}}" onInput="onInput" data-field="projectName" />
+    </view>
+    <view class="form-group">
+      <view class="form-label">备注</view>
+      <textarea class="form-textarea" placeholder="备注说明" value="{{form.remark}}" onInput="onInput" data-field="remark" />
+    </view>
+
+    <view class="form-group" a:if="{{autoCategory}}">
+      <view class="form-label">系统分类</view>
+      <view class="category-preview">
+        <text class="cat-icon">{{autoCategory.icon}}</text>
+        <text class="cat-name" style="color: {{autoCategory.color}}">{{autoCategory.categoryName}}</text>
+      </view>
+    </view>
+
+    <view class="form-group">
+      <view class="form-label">附件（验收单等）</view>
+      <view class="upload-grid">
+        <view class="upload-item" a:for="{{form.attachments}}" a:key="index">
+          <image class="upload-preview" src="{{item.preview}}" mode="aspectFill" />
+          <view class="upload-delete" onTap="removeAttachment" data-index="{{index}}">×</view>
+        </view>
+        <view class="upload-add" onTap="chooseImage">
+          <text class="upload-add-icon">+</text>
+          <text class="upload-add-text">上传</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <button class="btn btn-primary btn-block" onTap="submit" disabled="{{submitting}}">提交入库</button>
+  <view class="safe-bottom"></view>
+</view>

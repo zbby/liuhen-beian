@@ -1,0 +1,104 @@
+<!-- 组织注册/加入 -->
+<view class="container">
+  <view class="brand-header">
+    <text class="brand-title">欢迎使用留痕备案</text>
+    <text class="brand-subtitle">请创建或加入一个组织开始使用</text>
+  </view>
+
+  <!-- 选择步骤 -->
+  <view class="step-choose" a:if="{{step === 'choose'}}">
+    <view class="choice-card" onTap="switchStep" data-step="create">
+      <view class="choice-icon create-icon">
+        <text>+</text>
+      </view>
+      <view class="choice-info">
+        <text class="choice-title">创建组织</text>
+        <text class="choice-desc">新建一个留痕备案组织，成为管理员</text>
+      </view>
+      <text class="choice-arrow">></text>
+    </view>
+
+    <view class="choice-card" onTap="switchStep" data-step="join">
+      <view class="choice-icon join-icon">
+        <text>#</text>
+      </view>
+      <view class="choice-info">
+        <text class="choice-title">加入组织</text>
+        <text class="choice-desc">输入邀请码加入已有组织</text>
+      </view>
+      <text class="choice-arrow">></text>
+    </view>
+
+    <view class="tips-card">
+      <view class="tips-title">关于组织</view>
+      <view class="tips-item">· 组织是留痕备案的基本单位，事件在组织内流转</view>
+      <view class="tips-item">· 创建组织后可生成邀请码邀请成员加入</view>
+      <view class="tips-item">· 组织管理员可管理成员、配置审批模板</view>
+      <view class="tips-item">· 数据在组织范围内隔离，符合信息安全要求</view>
+    </view>
+  </view>
+
+  <!-- 创建组织 -->
+  <view class="step-form" a:if="{{step === 'create'}}">
+    <view class="card">
+      <view class="form-group">
+        <view class="form-label">
+          组织名称<span class="required">*</span>
+        </view>
+        <input 
+          class="form-input" 
+          placeholder="如：XX公司安全合规部"
+          value="{{orgName}}"
+          onInput="onOrgNameInput"
+          maxlength="50"
+        />
+      </view>
+
+      <view class="form-group">
+        <view class="form-label">组织描述</view>
+        <textarea 
+          class="form-textarea" 
+          placeholder="简要描述组织用途（选填）"
+          value="{{orgDesc}}"
+          onInput="onOrgDescInput"
+          maxlength="200"
+        />
+      </view>
+
+      <button class="btn btn-primary btn-block" onTap="createOrg" disabled="{{submitting}}">
+        创建组织
+      </button>
+      <view class="form-back" onTap="switchStep" data-step="choose">
+        <text>返回</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 加入组织 -->
+  <view class="step-form" a:if="{{step === 'join'}}">
+    <view class="card">
+      <view class="form-group">
+        <view class="form-label">
+          邀请码<span class="required">*</span>
+        </view>
+        <input 
+          class="form-input" 
+          placeholder="请输入组织邀请码"
+          value="{{inviteCode}}"
+          onInput="onInviteCodeInput"
+          maxlength="32"
+        />
+        <view class="form-hint-block">
+          邀请码由组织管理员在"我的-组织管理"中生成
+        </view>
+      </view>
+
+      <button class="btn btn-primary btn-block" onTap="joinOrg" disabled="{{submitting}}">
+        加入组织
+      </button>
+      <view class="form-back" onTap="switchStep" data-step="choose">
+        <text>返回</text>
+      </view>
+    </view>
+  </view>
+</view>

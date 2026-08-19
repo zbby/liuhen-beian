@@ -1,69 +1,4 @@
 /* 发起页面样式 */
-.page-header {
-  padding: 32rpx 24rpx;
-  background-color: #1890FF;
-  color: #FFFFFF;
-  margin: -24rpx -24rpx 24rpx -24rpx;
-}
-
-.page-title {
-  font-size: 36rpx;
-  font-weight: 600;
-  display: block;
-}
-
-.page-subtitle {
-  font-size: 26rpx;
-  opacity: 0.9;
-  display: block;
-  margin-top: 8rpx;
-}
-
-.form-section {
-  background-color: #FFFFFF;
-  border-radius: 12rpx;
-  padding: 24rpx;
-}
-
-.form-group {
-  margin-bottom: 40rpx;
-}
-
-.form-label {
-  font-size: 28rpx;
-  font-weight: 600;
-  color: #333333;
-  margin-bottom: 16rpx;
-  display: flex;
-  align-items: center;
-}
-
-.form-hint {
-  font-size: 24rpx;
-  color: #999999;
-  font-weight: 400;
-  margin-left: 16rpx;
-}
-
-.form-input {
-  height: 88rpx;
-  background-color: #F5F5F5;
-  border-radius: 8rpx;
-  padding: 0 24rpx;
-  font-size: 28rpx;
-  border: 1rpx solid #E8E8E8;
-}
-
-.form-textarea {
-  background-color: #F5F5F5;
-  border-radius: 8rpx;
-  padding: 24rpx;
-  font-size: 28rpx;
-  border: 1rpx solid #E8E8E8;
-  min-height: 200rpx;
-  line-height: 1.6;
-}
-
 .char-count {
   text-align: right;
   font-size: 24rpx;
@@ -75,30 +10,33 @@
 .category-preview {
   display: flex;
   align-items: center;
-  background-color: #F5F5F5;
-  border-radius: 8rpx;
+  background-color: #F5F6FA;
+  border-radius: 12rpx;
   padding: 16rpx 24rpx;
+  gap: 12rpx;
 }
 
-.category-tag {
+.cat-icon {
+  font-size: 32rpx;
+}
+
+.cat-name {
   font-size: 28rpx;
-  color: #1890FF;
-  font-weight: 500;
-  margin-right: 16rpx;
+  font-weight: 600;
 }
 
-.category-hint {
-  font-size: 24rpx;
+.cat-confidence {
+  font-size: 22rpx;
   color: #999999;
+  margin-left: auto;
+}
+
+.cat-source {
+  font-size: 22rpx;
+  color: #C0C0C0;
 }
 
 /* 上传区域 */
-.upload-section {
-  background-color: #F5F5F5;
-  border-radius: 8rpx;
-  padding: 24rpx;
-}
-
 .upload-grid {
   display: flex;
   flex-wrap: wrap;
@@ -109,7 +47,7 @@
   position: relative;
   width: 160rpx;
   height: 160rpx;
-  border-radius: 8rpx;
+  border-radius: 12rpx;
   overflow: hidden;
 }
 
@@ -118,25 +56,51 @@
   height: 100%;
 }
 
+.upload-file-preview {
+  width: 100%;
+  height: 100%;
+  background-color: #F0F2F5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 8rpx;
+}
+
+.upload-file-icon {
+  font-size: 40rpx;
+  margin-bottom: 8rpx;
+}
+
+.upload-file-name {
+  font-size: 18rpx;
+  color: #666666;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 140rpx;
+}
+
 .upload-delete {
   position: absolute;
-  top: 8rpx;
-  right: 8rpx;
-  width: 40rpx;
-  height: 40rpx;
+  top: 4rpx;
+  right: 4rpx;
+  width: 36rpx;
+  height: 36rpx;
   background-color: rgba(0, 0, 0, 0.5);
   color: #FFFFFF;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 32rpx;
+  font-size: 28rpx;
 }
 
 .upload-add {
   width: 160rpx;
   height: 160rpx;
-  border-radius: 8rpx;
+  border-radius: 12rpx;
   border: 2rpx dashed #D9D9D9;
   display: flex;
   flex-direction: column;
@@ -146,35 +110,36 @@
 }
 
 .upload-add-icon {
-  font-size: 48rpx;
+  font-size: 44rpx;
   color: #D9D9D9;
-  margin-bottom: 8rpx;
+  margin-bottom: 4rpx;
 }
 
 .upload-add-text {
-  font-size: 24rpx;
+  font-size: 22rpx;
   color: #999999;
 }
 
 .upload-tips {
-  font-size: 24rpx;
-  color: #999999;
+  font-size: 22rpx;
+  color: #C0C0C0;
   margin-top: 16rpx;
 }
 
-/* 单选按钮 */
+/* 单选 */
 .radio-group {
-  background-color: #F5F5F5;
-  border-radius: 8rpx;
-  padding: 16rpx;
+  background-color: #F5F6FA;
+  border-radius: 12rpx;
+  padding: 12rpx;
 }
 
 .radio-item {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   padding: 20rpx 16rpx;
-  border-radius: 8rpx;
+  border-radius: 10rpx;
   margin-bottom: 8rpx;
+  transition: background-color 0.2s;
 }
 
 .radio-item:last-child {
@@ -183,6 +148,7 @@
 
 .radio-item.selected {
   background-color: #FFFFFF;
+  box-shadow: 0 2rpx 8rpx rgba(0, 82, 217, 0.1);
 }
 
 .radio-dot {
@@ -192,10 +158,12 @@
   border: 2rpx solid #D9D9D9;
   margin-right: 16rpx;
   position: relative;
+  flex-shrink: 0;
+  margin-top: 4rpx;
 }
 
 .radio-dot.active {
-  border-color: #1890FF;
+  border-color: #0052D9;
 }
 
 .radio-dot.active::after {
@@ -207,25 +175,28 @@
   width: 18rpx;
   height: 18rpx;
   border-radius: 50%;
-  background-color: #1890FF;
+  background-color: #0052D9;
+}
+
+.radio-info {
+  flex: 1;
 }
 
 .radio-label {
   font-size: 28rpx;
   color: #333333;
+  font-weight: 500;
+  display: block;
+}
+
+.radio-desc {
+  font-size: 24rpx;
+  color: #999999;
+  display: block;
+  margin-top: 4rpx;
 }
 
 /* 模板选择 */
-.template-section {
-  margin-bottom: 24rpx;
-}
-
-.template-title {
-  font-size: 26rpx;
-  color: #999999;
-  margin-bottom: 16rpx;
-}
-
 .template-list {
   display: flex;
   flex-wrap: wrap;
@@ -234,7 +205,7 @@
 
 .template-item {
   padding: 12rpx 24rpx;
-  background-color: #F5F5F5;
+  background-color: #F5F6FA;
   border-radius: 8rpx;
   font-size: 26rpx;
   color: #333333;
@@ -242,28 +213,28 @@
 }
 
 .template-item.selected {
-  background-color: #e6f7ff;
-  border-color: #1890FF;
-  color: #1890FF;
+  background-color: #E8F0FE;
+  border-color: #0052D9;
+  color: #0052D9;
 }
 
 /* 审批人列表 */
 .approvers-section {
-  background-color: #F5F5F5;
-  border-radius: 8rpx;
+  background-color: #F5F6FA;
+  border-radius: 12rpx;
   padding: 16rpx;
 }
 
 .approvers-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 16rpx;
+  gap: 12rpx;
 }
 
 .approver-tag {
   display: flex;
   align-items: center;
-  padding: 12rpx 20rpx;
+  padding: 10rpx 20rpx;
   background-color: #FFFFFF;
   border-radius: 8rpx;
   font-size: 26rpx;
@@ -273,35 +244,31 @@
 
 .approver-delete {
   margin-left: 12rpx;
-  color: #999999;
+  color: #C0C0C0;
   font-size: 32rpx;
 }
 
 .approver-add {
   display: flex;
   align-items: center;
-  padding: 12rpx 20rpx;
+  padding: 10rpx 20rpx;
   background-color: #FFFFFF;
   border-radius: 8rpx;
   font-size: 26rpx;
-  color: #1890FF;
-  border: 1rpx dashed #1890FF;
+  color: #0052D9;
+  border: 1rpx dashed #0052D9;
 }
 
-/* 提交区域 */
+/* 提交 */
 .submit-section {
-  margin-top: 48rpx;
+  margin-top: 16rpx;
+  padding: 0 4rpx;
 }
 
 .submit-tips {
   text-align: center;
-  font-size: 24rpx;
-  color: #999999;
+  font-size: 22rpx;
+  color: #C0C0C0;
   margin-top: 16rpx;
-}
-
-/* 按钮禁用状态 */
-.btn[disabled] {
-  background-color: #D9D9D9 !important;
-  color: #FFFFFF !important;
+  line-height: 1.5;
 }

@@ -1,0 +1,56 @@
+<!-- 甲供材出库领用 -->
+<view class="container">
+  <view class="brand-header">
+    <text class="brand-title">出库领用</text>
+    <text class="brand-subtitle">出库发放至项目</text>
+  </view>
+  <view class="card">
+    <view class="form-group">
+      <view class="form-label">材料名称<span class="required">*</span></view>
+      <input class="form-input" placeholder="如：OLT 设备" value="{{form.materialName}}" onInput="onInput" data-field="materialName" />
+    </view>
+    <view class="form-group">
+      <view class="form-label">规格型号</view>
+      <input class="form-input" placeholder="规格型号" value="{{form.spec}}" onInput="onInput" data-field="spec" />
+    </view>
+    <view class="form-group">
+      <view class="form-label">数量<span class="required">*</span></view>
+      <input class="form-input" type="number" placeholder="数量" value="{{form.quantity}}" onInput="onInput" data-field="quantity" />
+    </view>
+    <view class="form-group">
+      <view class="form-label">单位</view>
+      <input class="form-input" placeholder="如：台/个/公里" value="{{form.unit}}" onInput="onInput" data-field="unit" />
+    </view>
+    <view class="form-group">
+      <view class="form-label">领用项目</view>
+      <input class="form-input" placeholder="项目名称" value="{{form.projectName}}" onInput="onInput" data-field="projectName" />
+    </view>
+    <view class="form-group">
+      <view class="form-label">领用人</view>
+      <input class="form-input" placeholder="领用人姓名" value="{{form.receiver}}" onInput="onInput" data-field="receiver" />
+    </view>
+    <view class="form-group">
+      <view class="form-label">备注</view>
+      <textarea class="form-textarea" placeholder="备注说明" value="{{form.remark}}" onInput="onInput" data-field="remark" />
+    </view>
+    <view class="form-group" a:if="{{autoCategory}}">
+      <view class="form-label">系统分类</view>
+      <view class="category-preview">
+        <text class="cat-icon">{{autoCategory.icon}}</text>
+        <text class="cat-name" style="color: {{autoCategory.color}}">{{autoCategory.categoryName}}</text>
+      </view>
+    </view>
+    <view class="form-group">
+      <view class="form-label">附件（领料单等）</view>
+      <view class="upload-grid">
+        <view class="upload-item" a:for="{{form.attachments}}" a:key="index">
+          <image class="upload-preview" src="{{item.preview}}" mode="aspectFill" />
+          <view class="upload-delete" onTap="removeAttachment" data-index="{{index}}">×</view>
+        </view>
+        <view class="upload-add" onTap="chooseImage"><text class="upload-add-icon">+</text><text class="upload-add-text">上传</text></view>
+      </view>
+    </view>
+  </view>
+  <button class="btn btn-primary btn-block" onTap="submit" disabled="{{submitting}}">提交出库</button>
+  <view class="safe-bottom"></view>
+</view>

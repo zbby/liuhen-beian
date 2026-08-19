@@ -1,0 +1,7 @@
+.tpl-list { display: flex; flex-direction: column; gap: 16rpx; }
+.tpl-item { background-color: #FFFFFF; border-radius: 16rpx; padding: 24rpx; border: 2rpx solid transparent; box-shadow: 0 2rpx 12rpx rgba(0,0,0,0.05); }
+.tpl-item.selected { border-color: #0052D9; background-color: #E8F0FE; }
+.tpl-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12rpx; }
+.tpl-name { font-size: 30rpx; font-weight: 600; color: #333; }
+.tpl-nodes { display: flex; flex-direction: column; gap: 8rpx; }
+.tpl-node-text { font-size: 24rpx; color: #666; }

@@ -1,36 +1,40 @@
 <!-- 审批列表 -->
 <view class="container">
-  <view class="page-header">
-    <text class="page-title">待我审批</text>
-    <text class="page-subtitle">需要您处理的事件</text>
+  <view class="brand-header">
+    <text class="brand-title">待我审批</text>
+    <text class="brand-subtitle">需要您处理的事件</text>
   </view>
 
+  <!-- 筛选栏 -->
+  <view class="filter-bar">
+    <view class="filter-item {{filterType === 'pending' ? 'active' : ''}}" onTap="setFilter" data-type="pending">待处理</view>
+    <view class="filter-item {{filterType === 'done' ? 'active' : ''}}" onTap="setFilter" data-type="done">已处理</view>
+  </view>
+
+  <!-- 列表 -->
   <view class="approval-list">
-    <view 
-      class="approval-item"
-      a:for="{{approvalList}}"
-      a:key="id"
-      onTap="goToDetail"
-      data-id="{{item.id}}"
-    >
-      <view class="approval-left">
-        <view class="approval-category" style="background-color: {{item.categoryColor}}"></view>
+    <view class="approval-item" a:for="{{approvalList}}" a:key="id" onTap="goToDetail" data-id="{{item.id}}">
+      <view class="ap-cat-icon" style="background-color: {{item.categoryColor}}">
+        <text>{{item.categoryIcon}}</text>
       </view>
-      <view class="approval-content">
-        <view class="approval-title">{{item.title}}</view>
-        <view class="approval-desc">{{item.description}}</view>
-        <view class="approval-footer">
-          <view class="approval-meta">
-            <text>发起人：{{item.creator}}</text>
-            <text>时间：{{item.createTime}}</text>
-          </view>
-          <view class="approval-mode tag">{{item.approvalModeText}}</view>
+      <view class="ap-body">
+        <view class="ap-title">{{item.title}}</view>
+        <view class="ap-desc">{{item.description}}</view>
+        <view class="ap-meta">
+          <text class="ap-creator">发起人：{{item.creator.name}}</text>
+          <text class="ap-time">{{item.createTime}}</text>
+        </view>
+        <view class="ap-tags">
+          <text class="ap-tag cat">{{item.categoryName}}</text>
+          <text class="ap-tag mode">{{item.approvalModeText}}</text>
+          <text class="tag tag-{{item.status}}">{{item.statusText}}</text>
         </view>
       </view>
+      <text class="ap-arrow">></text>
     </view>
 
     <!-- 空状态 -->
-    <view class="empty-state" a:if="{{approvalList.length === 0}}">
+    <view class="empty-state" a:if="{{approvalList.length === 0 && !loading}}">
       <text class="empty-state-icon">✅</text>
       <text class="empty-state-text">暂无待审批事件</text>
       <text class="empty-state-hint">所有审批已处理完成</text>

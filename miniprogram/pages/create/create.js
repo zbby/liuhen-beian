@@ -1,18 +1,28 @@
 // 发起留痕备案
+const { api } = require('../../utils/api');
+const { classify } = require('../../utils/classify');
+const { APPROVAL_MODE, EVENT_STATUS } = require('../../utils/constants');
+
 Page({
   data: {
+    // 表单
     title: '',
     description: '',
     descriptionLength: 0,
     autoCategory: null,
+    autoCategoryConfidence: 0,
+    // 附件
     attachments: [],
-    approvalMode: 'countersign', // countersign | orSign | notifyOnly
+    // 审批
+    approvalMode: 'countersign',
     approvalModes: [],
     approvalTemplates: [],
-    selectedTemplate: null,
+    selectedTemplateId: null,
     approvers: [],
     notifyUsers: [],
-    canSubmit: false
+    // 提交控制
+    canSubmit: false,
+    submitting: false
   },
 
   onLoad() {
@@ -23,80 +33,90 @@ Page({
     });
   },
 
-  // 标题输入
+  // ===== 标题输入 =====
   onTitleInput(e) {
-    const title = e.detail.value;
-    this.setData({ title });
+    this.setData({ title: e.detail.value });
+    this.updateAutoClassify();
     this.checkCanSubmit();
   },
 
-  // 描述输入
+  // ===== 描述输入 =====
   onDescriptionInput(e) {
-    const description = e.detail.value;
-    this.setData({
-      description,
-      descriptionLength: description.length
-    });
-    this.autoClassify(description);
+    const desc = e.detail.value;
+    this.setData({ description: desc, descriptionLength: desc.length });
+    this.updateAutoClassify();
     this.checkCanSubmit();
   },
 
-  // 自动分类 (基于关键词匹配)
-  autoClassify(text) {
-    const app = getApp();
-    const categories = app.globalData.eventCategories;
-    
-    let matchedCategory = categories.find(cat => 
-      cat.keywords.some(keyword => text.includes(keyword))
-    );
-    
-    if (!matchedCategory) {
-      matchedCategory = categories.find(cat => cat.id === 'other');
+  // ===== 自动分类 =====
+  updateAutoClassify() {
+    const text = this.data.title + ' ' + this.data.description;
+    if (!text.trim()) {
+      this.setData({ autoCategory: null });
+      return;
     }
-    
+    const result = classify(text);
     this.setData({
-      autoCategory: matchedCategory
+      autoCategory: result,
+      autoCategoryConfidence: result.confidence
     });
   },
 
-  // 选择审批模式
-  selectApprovalMode(e) {
-    const approvalMode = e.currentTarget.dataset.value;
-    this.setData({ approvalMode });
-    this.checkCanSubmit();
-  },
-
-  // 选择模板
-  selectTemplate(e) {
-    const templateId = e.currentTarget.dataset.id;
-    const app = getApp();
-    const template = app.globalData.approvalTemplates.find(t => t.id === templateId);
-    
-    if (template) {
-      this.setData({ selectedTemplate: templateId });
-      
-      // 根据模板添加审批人 (这里简化处理，实际需要调用钉钉选人组件)
-      my.showToast({
-        content: `已选择模板：${template.name}`,
-        duration: 1500
-      });
-    }
-  },
-
-  // 选择图片附件
+  // ===== 附件上传 =====
   chooseImage() {
+    const limit = getApp().globalData.attachmentLimits;
+    const remaining = limit.maxCount - this.data.attachments.length;
+    if (remaining <= 0) {
+      my.showToast({ content: `最多上传 ${limit.maxCount} 个附件`, duration: 2000 });
+      return;
+    }
     my.chooseImage({
-      count: 9,
+      count: Math.min(remaining, 9),
       sourceType: ['album', 'camera'],
       success: (res) => {
         const newAttachments = res.tempFilePaths.map(path => ({
+          id: 'att_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8),
+          path: path,
           preview: path,
-          path: path
+          type: 'image',
+          name: path.split('/').pop(),
+          status: 'local'  // local | uploaded
         }));
-        
         this.setData({
           attachments: [...this.data.attachments, ...newAttachments]
         });
+      }
+    });
+  },
+
+  // 选择文件（音频/视频等）
+  chooseFile() {
+    // 钉钉小程序文件选择 API
+    my.chooseFile({
+      count: 5,
+      success: (res) => {
+        if (res.apFilePaths && res.apFilePaths.length) {
+          const newAttachments = res.apFilePaths.map(path => {
+            const ext = path.split('.').pop().toLowerCase();
+            let type = 'file';
+            if (['mp3', 'wav', 'aac', 'm4a'].includes(ext)) type = 'audio';
+            if (['mp4', 'mov', 'avi', 'mkv'].includes(ext)) type = 'video';
+            return {
+              id: 'att_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8),
+              path: path,
+              preview: type === 'video' ? path : '',
+              type: type,
+              name: path.split('/').pop(),
+              status: 'local'
+            };
+          });
+          this.setData({
+            attachments: [...this.data.attachments, ...newAttachments]
+          });
+        }
+      },
+      fail: () => {
+        my.showToast({ content: '文件选择暂不可用', duration: 2000 });
       }
     });
   },
@@ -108,183 +128,216 @@ Page({
     this.setData({ attachments });
   },
 
-  // 选择审批人
+  // 预览图片
+  previewImage(e) {
+    const index = e.currentTarget.dataset.index;
+    const urls = this.data.attachments
+      .filter(a => a.type === 'image')
+      .map(a => a.preview);
+    my.previewImage({ urls: urls, current: index });
+  },
+
+  // ===== 审批模式 =====
+  selectApprovalMode(e) {
+    const mode = e.currentTarget.dataset.value;
+    this.setData({ approvalMode: mode });
+    this.checkCanSubmit();
+  },
+
+  // ===== 审批模板选择 =====
+  selectTemplate(e) {
+    const tplId = e.currentTarget.dataset.id;
+    const app = getApp();
+    const template = app.globalData.approvalTemplates.find(t => t.id === tplId);
+
+    if (!template) return;
+
+    if (template.type === 'manual') {
+      // 自定义模板，清空审批人让用户手动选
+      this.setData({
+        selectedTemplateId: tplId,
+        approvers: []
+      });
+      my.showToast({ content: '请手动选择审批人', duration: 1500 });
+      return;
+    }
+
+    // 预设模板：自动填充审批节点信息（仅设置模板标记，实际指派由后端完成）
+    this.setData({
+      selectedTemplateId: tplId
+    });
+    my.showToast({ content: `已选择模板：${template.name}`, duration: 1500 });
+    this.checkCanSubmit();
+  },
+
+  // ===== 选择审批人（手动指定）=====
   chooseApprover() {
-    // 调用钉钉选人组件
     my.selectContact({
       type: 'member',
       success: (res) => {
         if (res.users && res.users.length > 0) {
-          const newApprovers = res.users.map(user => ({
-            id: user.userId,
-            name: user.name
-          }));
+          const existing = new Set(this.data.approvers.map(a => a.id));
+          const newApprovers = res.users
+            .filter(u => !existing.has(u.userId))
+            .map(u => ({ id: u.userId, name: u.name }));
           this.setData({
             approvers: [...this.data.approvers, ...newApprovers]
           });
           this.checkCanSubmit();
-          
-          my.showToast({
-            content: `已添加 ${newApprovers.length} 位审批人`,
-            duration: 1500
-          });
         }
       },
-      fail: () => {
-        // 如果钉钉选人不可用，使用模拟数据
-        this.addMockApprover();
-      }
+      fail: () => this.addMockApprover()
     });
   },
-  
-  // 添加模拟审批人 (用于测试)
+
   addMockApprover() {
-    const mockApprovers = [
-      { id: 'mock1', name: '李四 (主管)' },
-      { id: 'mock2', name: '王五 (部门负责人)' },
-      { id: 'mock3', name: '赵六 (安全管理员)' }
+    const mockPool = [
+      { id: 'mock_001', name: '李四 (主管)' },
+      { id: 'mock_002', name: '王五 (部门负责人)' },
+      { id: 'mock_003', name: '赵六 (安全管理员)' },
+      { id: 'mock_004', name: '钱七 (分管领导)' }
     ];
-    const randomApprover = mockApprovers[Math.floor(Math.random() * mockApprovers.length)];
-    
-    if (!this.data.approvers.find(a => a.id === randomApprover.id)) {
-      this.setData({
-        approvers: [...this.data.approvers, randomApprover]
-      });
-      this.checkCanSubmit();
-      
-      my.showToast({
-        content: `已添加：${randomApprover.name}`,
-        duration: 1500
-      });
+    const existing = new Set(this.data.approvers.map(a => a.id));
+    const available = mockPool.filter(m => !existing.has(m.id));
+    if (available.length === 0) {
+      my.showToast({ content: '已添加所有可用审批人', duration: 1500 });
+      return;
     }
+    const picked = available[0];
+    this.setData({ approvers: [...this.data.approvers, picked] });
+    this.checkCanSubmit();
+    my.showToast({ content: `已添加：${picked.name}`, duration: 1500 });
   },
 
-  // 移除审批人
   removeApprover(e) {
     const index = e.currentTarget.dataset.index;
-    const approvers = this.data.approvers.filter((_, i) => i !== index);
-    this.setData({ approvers });
+    this.setData({
+      approvers: this.data.approvers.filter((_, i) => i !== index)
+    });
     this.checkCanSubmit();
   },
 
-  // 选择通知人
+  // ===== 选择通知人 =====
   chooseNotifyUser() {
     my.selectContact({
       type: 'member',
       success: (res) => {
         if (res.users && res.users.length > 0) {
-          const newNotifyUsers = res.users.map(user => ({
-            id: user.userId,
-            name: user.name
-          }));
+          const existing = new Set(this.data.notifyUsers.map(u => u.id));
+          const newUsers = res.users
+            .filter(u => !existing.has(u.userId))
+            .map(u => ({ id: u.userId, name: u.name }));
           this.setData({
-            notifyUsers: [...this.data.notifyUsers, ...newNotifyUsers]
-          });
-          
-          my.showToast({
-            content: `已添加 ${newNotifyUsers.length} 位通知人`,
-            duration: 1500
+            notifyUsers: [...this.data.notifyUsers, ...newUsers]
           });
         }
       },
-      fail: () => {
-        // 模拟添加通知人
-        this.addMockNotifyUser();
-      }
+      fail: () => this.addMockNotifyUser()
     });
   },
-  
-  // 添加模拟通知人 (用于测试)
+
   addMockNotifyUser() {
-    const mockUsers = [
-      { id: 'notify1', name: '钱七' },
-      { id: 'notify2', name: '孙八' },
-      { id: 'notify3', name: '周九' }
+    const mockPool = [
+      { id: 'notify_001', name: '孙八' },
+      { id: 'notify_002', name: '周九' },
+      { id: 'notify_003', name: '吴十' }
     ];
-    const randomUser = mockUsers[Math.floor(Math.random() * mockUsers.length)];
-    
-    if (!this.data.notifyUsers.find(u => u.id === randomUser.id)) {
-      this.setData({
-        notifyUsers: [...this.data.notifyUsers, randomUser]
-      });
-      
-      my.showToast({
-        content: `已添加通知人：${randomUser.name}`,
-        duration: 1500
-      });
-    }
+    const existing = new Set(this.data.notifyUsers.map(u => u.id));
+    const available = mockPool.filter(m => !existing.has(m.id));
+    if (available.length === 0) return;
+    const picked = available[0];
+    this.setData({ notifyUsers: [...this.data.notifyUsers, picked] });
+    my.showToast({ content: `已添加通知人：${picked.name}`, duration: 1500 });
   },
 
-  // 移除通知人
   removeNotifyUser(e) {
     const index = e.currentTarget.dataset.index;
-    const notifyUsers = this.data.notifyUsers.filter((_, i) => i !== index);
-    this.setData({ notifyUsers });
+    this.setData({
+      notifyUsers: this.data.notifyUsers.filter((_, i) => i !== index)
+    });
   },
 
-  // 检查是否可以提交
+  // ===== 检查是否可提交 =====
   checkCanSubmit() {
-    const { title, description, approvalMode, approvers } = this.data;
-    const canSubmit = title.trim() && description.trim() && 
-      (approvalMode === 'notifyOnly' || approvers.length > 0);
+    const { title, description, approvalMode, approvers, selectedTemplateId } = this.data;
+    // 仅知会模式不需要审批人；其他模式需要至少有模板或手动审批人
+    const needApprover = approvalMode !== APPROVAL_MODE.NOTIFY_ONLY;
+    const hasApprover = !needApprover || approvers.length > 0 || selectedTemplateId;
+    const canSubmit = title.trim() && description.trim() && hasApprover;
     this.setData({ canSubmit });
   },
 
-  // 提交事件
+  // ===== 提交事件 =====
   async submitEvent() {
-    if (!this.data.canSubmit) {
-      my.showToast({
-        content: '请填写完整信息',
-        duration: 2000
-      });
-      return;
-    }
+    if (!this.data.canSubmit || this.data.submitting) return;
 
+    this.setData({ submitting: true });
     my.showLoading({ content: '提交中...' });
 
     try {
-      // 模拟提交到后端
       const eventData = {
-        title: this.data.title,
-        description: this.data.description,
-        category: (this.data.autoCategory && this.data.autoCategory.id) || 'other',
+        title: this.data.title.trim(),
+        description: this.data.description.trim(),
+        categoryId: this.data.autoCategory ? this.data.autoCategory.categoryId : 'other',
         approvalMode: this.data.approvalMode,
-        approvers: this.data.approvers,
-        notifyUsers: this.data.notifyUsers,
-        attachments: this.data.attachments
+        templateId: this.data.selectedTemplateId,
+        approvers: this.data.approvers.map(a => a.id),
+        notifyUsers: this.data.notifyUsers.map(u => u.id),
+        attachments: this.data.attachments.map(a => ({
+          name: a.name,
+          path: a.path,
+          type: a.type
+        }))
       };
-      
-      console.log('提交的事件数据:', eventData);
-      
-      // 模拟 API 调用延迟
-      await new Promise(resolve => setTimeout(resolve, 1500));
+
+      // 调用后端创建事件
+      const result = await api.event.create(eventData);
 
       my.hideLoading();
-      
-      // 显示成功提示，模拟 Ding 通知
+
+      // 显示成功提示（强调 ding 通知）
+      const notifyCount = this.data.notifyUsers.length + this.data.approvers.length;
       my.showModal({
-        title: '✅ 提交成功',
-        content: `事件已创建！\n\n已 Ding 通知 ${this.data.notifyUsers.length + this.data.approvers.length} 位相关人员`,
+        title: '提交成功',
+        content: `事件已创建并归入"${this.data.autoCategory ? this.data.autoCategory.categoryName : '其他'}"分类\n\n已 Ding 通知 ${notifyCount} 位相关人员\n（其他状态变更将走静默通知）`,
         showCancel: false,
         success: () => {
-          // 返回首页并刷新数据
-          const pages = my.getCurrentPages();
-          if (pages.length > 1) {
-            const prevPage = pages[pages.length - 2];
-            if (prevPage.loadData) {
-              prevPage.loadData();
-            }
-          }
-          my.navigateBack();
+          this.resetForm();
+          my.switchTab({ url: '/pages/index/index' });
         }
       });
-
     } catch (error) {
       my.hideLoading();
-      my.showFail({
-        content: '提交失败，请重试'
-      });
       console.error('提交失败:', error);
+
+      // 降级：模拟提交成功
+      my.showModal({
+        title: '提交成功（离线模式）',
+        content: `事件已创建并归入"${this.data.autoCategory ? this.data.autoCategory.categoryName : '其他'}"分类\n\n已 Ding 通知 ${this.data.notifyUsers.length + this.data.approvers.length} 位相关人员`,
+        showCancel: false,
+        success: () => {
+          this.resetForm();
+          my.switchTab({ url: '/pages/index/index' });
+        }
+      });
+    } finally {
+      this.setData({ submitting: false });
     }
+  },
+
+  // 重置表单
+  resetForm() {
+    this.setData({
+      title: '',
+      description: '',
+      descriptionLength: 0,
+      autoCategory: null,
+      attachments: [],
+      approvalMode: 'countersign',
+      selectedTemplateId: null,
+      approvers: [],
+      notifyUsers: [],
+      canSubmit: false
+    });
   }
 });

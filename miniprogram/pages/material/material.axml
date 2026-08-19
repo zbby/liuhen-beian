@@ -1,0 +1,57 @@
+<!-- 甲供材流转仪表盘 -->
+<view class="container">
+  <view class="brand-header">
+    <text class="brand-title">甲供材流转</text>
+    <text class="brand-subtitle">出入库 · 转借 · 归还 · 报表</text>
+  </view>
+
+  <!-- 统计概览 -->
+  <view class="mat-stats-grid">
+    <view class="mat-stat-card">
+      <text class="mat-stat-value" style="color: #52C41A">{{stats.inStock}}</text>
+      <text class="mat-stat-label">在库</text>
+    </view>
+    <view class="mat-stat-card">
+      <text class="mat-stat-value" style="color: #1890FF">{{stats.outStock}}</text>
+      <text class="mat-stat-label">已出库</text>
+    </view>
+    <view class="mat-stat-card">
+      <text class="mat-stat-value" style="color: #FA8C16">{{stats.borrowed}}</text>
+      <text class="mat-stat-label">借出中</text>
+    </view>
+    <view class="mat-stat-card">
+      <text class="mat-stat-value" style="color: #722ED1">{{stats.totalValue}}</text>
+      <text class="mat-stat-label">总价值(元)</text>
+    </view>
+  </view>
+
+  <!-- 操作入口 -->
+  <view class="mat-menu-grid">
+    <view class="mat-menu-item" a:for="{{menuItems}}" a:key="id" onTap="goToSubPage" data-id="{{item.id}}">
+      <view class="mat-menu-icon" style="background-color: {{item.color}}">
+        <text>{{item.icon}}</text>
+      </view>
+      <text class="mat-menu-name">{{item.name}}</text>
+      <text class="mat-menu-desc">{{item.desc}}</text>
+    </view>
+  </view>
+
+  <!-- 最近流转记录 -->
+  <view class="section-header" style="margin-top: 20rpx;">
+    <text class="section-title">最近流转</text>
+  </view>
+
+  <view class="mat-log-list">
+    <view class="mat-log-item" a:for="{{recentLogs}}" a:key="id" onTap="goToDetail" data-id="{{item.id}}">
+      <view class="mat-log-body">
+        <text class="mat-log-title">{{item.title}}</text>
+        <view class="mat-log-meta">
+          <text class="mat-log-person">{{item.person}}</text>
+          <text class="mat-log-time">{{item.time}}</text>
+          <text class="tag tag-{{item.status}}">{{item.status === 'completed' ? '已完成' : '进行中'}}</text>
+        </view>
+      </view>
+      <text class="mat-log-arrow">></text>
+    </view>
+  </view>
+</view>

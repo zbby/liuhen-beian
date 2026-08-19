@@ -1,0 +1,24 @@
+<!-- 审批模板选择 -->
+<view class="container">
+  <view class="brand-header">
+    <text class="brand-title">审批模板配置</text>
+    <text class="brand-subtitle">选择或管理审批模板</text>
+  </view>
+
+  <view class="tpl-list">
+    <view class="tpl-item {{selectedId === item.id ? 'selected' : ''}}" a:for="{{templates}}" a:key="id" onTap="selectTemplate" data-id="{{item.id}}">
+      <view class="tpl-header">
+        <text class="tpl-name">{{item.name}}</text>
+        <text class="tag tag-{{item.type === 'preset' ? 'completed' : 'processing'}}">{{item.type === 'preset' ? '预设' : '自定义'}}</text>
+      </view>
+      <view class="tpl-nodes" a:if="{{item.nodes && item.nodes.length}}">
+        <view class="tpl-node" a:for="{{item.nodes}}" a:for-item="node" a:key="index">
+          <text class="tpl-node-text">{{index + 1}}. {{node.nodeType === 'approval' ? '审批' : node.nodeType === 'cc' ? '知会' : ''}} | {{node.assignRule === 'auto' ? '自动指派' : '手动指定'}} | {{node.mode === 'countersign' ? '会签' : node.mode === 'orSign' ? '或签' : '仅通知'}}</text>
+        </view>
+      </view>
+      <view class="tpl-nodes" a:else>
+        <text class="tpl-node-text">自定义审批人，发起时手动选择</text>
+      </view>
+    </view>
+  </view>
+</view>

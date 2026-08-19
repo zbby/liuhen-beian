@@ -1,26 +1,29 @@
 <!-- 发起留痕备案 -->
 <view class="container">
-  <view class="page-header">
-    <text class="page-title">发起备案</text>
-    <text class="page-subtitle">填写事件信息并提交</text>
+  <view class="brand-header">
+    <text class="brand-title">发起备案</text>
+    <text class="brand-subtitle">填写事件信息，提交后 Ding 通知相关人员</text>
   </view>
 
-  <view class="form-section">
-    <!-- 事件标题 -->
+  <!-- 基本信息 -->
+  <view class="card">
     <view class="form-group">
-      <view class="form-label">事件标题 *</view>
+      <view class="form-label">
+        事件标题<span class="required">*</span>
+      </view>
       <input 
         class="form-input" 
-        placeholder="请输入事件标题，如：服务器配置变更备案"
+        placeholder="如：服务器配置变更备案"
         value="{{title}}"
         onInput="onTitleInput"
         maxlength="100"
       />
     </view>
 
-    <!-- 事件描述 -->
     <view class="form-group">
-      <view class="form-label">事件描述 *</view>
+      <view class="form-label">
+        事件描述<span class="required">*</span>
+      </view>
       <textarea 
         class="form-textarea" 
         placeholder="请详细描述事件内容，系统将自动分类..."
@@ -35,36 +38,61 @@
     <view class="form-group" a:if="{{autoCategory}}">
       <view class="form-label">系统分类</view>
       <view class="category-preview">
-        <text class="category-tag">{{autoCategory.name}}</text>
-        <text class="category-hint">根据描述内容自动识别</text>
+        <text class="cat-icon">{{autoCategory.icon}}</text>
+        <text class="cat-name" style="color: {{autoCategory.color}}">{{autoCategory.categoryName}}</text>
+        <text class="cat-confidence">置信度 {{autoCategoryConfidence >= 0 ? autoCategoryConfidence * 100 : 0}}%</text>
+        <text class="cat-source">({{autoCategory.source === 'keyword' ? '关键词匹配' : autoCategory.source === 'event_type' ? '类型指定' : '默认'}})</text>
       </view>
     </view>
+  </view>
 
-    <!-- 附件上传 -->
+  <!-- 附件上传 -->
+  <view class="card">
     <view class="form-group">
-      <view class="form-label">附件</view>
-      <view class="upload-section">
-        <view class="upload-grid">
-          <view 
-            class="upload-item" 
-            a:for="{{attachments}}" 
-            a:key="index"
-          >
-            <image class="upload-preview" src="{{item.preview}}" mode="aspectFill" />
-            <view class="upload-delete" onTap="removeAttachment" data-index="{{index}}">×</view>
+      <view class="form-label">
+        附件
+        <text class="form-hint">支持图片、音频、视频等</text>
+      </view>
+      <view class="upload-grid">
+        <!-- 已选附件 -->
+        <view class="upload-item" a:for="{{attachments}}" a:key="id">
+          <image a:if="{{item.type === 'image'}}" class="upload-preview" src="{{item.preview}}" mode="aspectFill" onTap="previewImage" data-index="{{index}}" />
+          <view a:elif="{{item.type === 'video'}}" class="upload-file-preview">
+            <text class="upload-file-icon">🎬</text>
+            <text class="upload-file-name">{{item.name}}</text>
           </view>
-          <view class="upload-add" onTap="chooseImage">
-            <text class="upload-add-icon">+</text>
-            <text class="upload-add-text">上传图片</text>
+          <view a:elif="{{item.type === 'audio'}}" class="upload-file-preview">
+            <text class="upload-file-icon">🎵</text>
+            <text class="upload-file-name">{{item.name}}</text>
           </view>
+          <view a:else class="upload-file-preview">
+            <text class="upload-file-icon">📄</text>
+            <text class="upload-file-name">{{item.name}}</text>
+          </view>
+          <view class="upload-delete" onTap="removeAttachment" data-index="{{index}}">×</view>
         </view>
-        <view class="upload-tips">支持图片、音频、视频等，最多 9 个</view>
-      </view>
-    </view>
 
-    <!-- 审批模式选择 -->
+        <!-- 上传入口 -->
+        <view class="upload-add" onTap="chooseImage">
+          <text class="upload-add-icon">+</text>
+          <text class="upload-add-text">图片</text>
+        </view>
+        <view class="upload-add" onTap="chooseFile">
+          <text class="upload-add-icon">📎</text>
+          <text class="upload-add-text">文件</text>
+        </view>
+      </view>
+      <view class="upload-tips">最多 20 个附件，单个文件最大 200MB</view>
+    </view>
+  </view>
+
+  <!-- 审批配置 -->
+  <view class="card">
+    <!-- 审批模式 -->
     <view class="form-group">
-      <view class="form-label">审批模式 *</view>
+      <view class="form-label">
+        审批模式<span class="required">*</span>
+      </view>
       <view class="radio-group">
         <view 
           class="radio-item {{approvalMode === item.value ? 'selected' : ''}}"
@@ -74,81 +102,78 @@
           data-value="{{item.value}}"
         >
           <view class="radio-dot {{approvalMode === item.value ? 'active' : ''}}"></view>
-          <text class="radio-label">{{item.label}}</text>
+          <view class="radio-info">
+            <text class="radio-label">{{item.label}}</text>
+            <text class="radio-desc">{{item.desc}}</text>
+          </view>
         </view>
       </view>
     </view>
 
-    <!-- 审批人选择 (仅当不是"仅通知"时显示) -->
-    <view class="form-group" a:if="{{approvalMode !== 'notifyOnly'}}">
+    <!-- 审批模板 -->
+    <view class="form-group">
       <view class="form-label">
-        <text>审批人</text>
-        <text class="form-hint">可选择模板或手动添加</text>
+        审批模板
+        <text class="form-hint">选择预设模板或自定义</text>
       </view>
-      
-      <!-- 审批人模板 -->
-      <view class="template-section">
-        <view class="template-title">快捷模板</view>
-        <view class="template-list">
-          <view 
-            class="template-item {{selectedTemplate === item.id ? 'selected' : ''}}"
-            a:for="{{approvalTemplates}}"
-            a:key="id"
-            onTap="selectTemplate"
-            data-id="{{item.id}}"
-          >
-            <text>{{item.name}}</text>
-          </view>
+      <view class="template-list">
+        <view 
+          class="template-item {{selectedTemplateId === item.id ? 'selected' : ''}}"
+          a:for="{{approvalTemplates}}"
+          a:key="id"
+          onTap="selectTemplate"
+          data-id="{{item.id}}"
+        >
+          <text>{{item.name}}</text>
         </view>
       </view>
+    </view>
 
-      <!-- 已选审批人列表 -->
+    <!-- 审批人选择（非仅知会模式）-->
+    <view class="form-group" a:if="{{approvalMode !== 'notifyOnly'}}">
+      <view class="form-label">
+        审批人
+        <text class="form-hint">可手动添加或使用模板自动指派</text>
+      </view>
       <view class="approvers-section">
         <view class="approvers-list">
-          <view 
-            class="approver-tag"
-            a:for="{{approvers}}"
-            a:key="index"
-          >
+          <view class="approver-tag" a:for="{{approvers}}" a:key="id">
             <text>{{item.name}}</text>
             <text class="approver-delete" onTap="removeApprover" data-index="{{index}}">×</text>
           </view>
           <view class="approver-add" onTap="chooseApprover">
-            <text>+ 添加审批人</text>
+            <text>+ 添加</text>
           </view>
         </view>
       </view>
     </view>
 
-    <!-- 通知人员 (可选) -->
+    <!-- 通知人员 -->
     <view class="form-group">
       <view class="form-label">
-        <text>通知人员</text>
-        <text class="form-hint">事件发起时会 Ding 通知 (可选)</text>
+        通知人员
+        <text class="form-hint">事件发起时 Ding 通知（可选）</text>
       </view>
       <view class="approvers-list">
-        <view 
-          class="approver-tag"
-          a:for="{{notifyUsers}}"
-          a:key="index"
-        >
+        <view class="approver-tag" a:for="{{notifyUsers}}" a:key="id">
           <text>{{item.name}}</text>
           <text class="approver-delete" onTap="removeNotifyUser" data-index="{{index}}">×</text>
         </view>
         <view class="approver-add" onTap="chooseNotifyUser">
-          <text>+ 添加通知人</text>
+          <text>+ 通知人</text>
         </view>
       </view>
     </view>
+  </view>
 
-    <!-- 提交按钮 -->
-    <view class="submit-section">
-      <button class="btn btn-primary btn-block" onTap="submitEvent" disabled="{{!canSubmit}}">
-        提交备案
-      </button>
-      <view class="submit-tips">
-        <text>提交后将 Ding 通知相关人员</text>
-      </view>
+  <!-- 提交 -->
+  <view class="submit-section">
+    <button class="btn btn-primary btn-block" onTap="submitEvent" disabled="{{!canSubmit || submitting}}">
+      {{submitting ? '提交中...' : '提交备案'}}
+    </button>
+    <view class="submit-tips">
+      <text>提交后将 Ding 通知审批人和通知人，其他状态变更走静默通知</text>
     </view>
   </view>
+  <view class="safe-bottom"></view>
 </view>

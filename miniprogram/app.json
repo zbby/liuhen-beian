@@ -2,22 +2,31 @@
   "pages": [
     "pages/index/index",
     "pages/create/create",
-    "pages/detail/detail",
     "pages/approval/approval",
     "pages/history/history",
-    "pages/profile/profile"
+    "pages/profile/profile",
+    "pages/detail/detail",
+    "pages/org-join/org-join",
+    "pages/material/material",
+    "pages/material/material-in",
+    "pages/material/material-out",
+    "pages/material/material-borrow",
+    "pages/material/material-return",
+    "pages/approval-node/approval-node",
+    "pages/template-select/template-select"
   ],
   "window": {
     "defaultTitle": "留痕备案",
     "navigationBarTitleText": "留痕备案",
-    "navigationBarBackgroundColor": "#1890FF",
+    "navigationBarBackgroundColor": "#0052D9",
     "navigationBarTextStyle": "white",
-    "backgroundColor": "#F5F5F5",
-    "pullRefresh": true
+    "backgroundColor": "#F5F6FA",
+    "pullRefresh": true,
+    "enablePullDownRefresh": true
   },
   "tabBar": {
     "textColor": "#999999",
-    "selectedColor": "#1890FF",
+    "selectedColor": "#0052D9",
     "backgroundColor": "#FFFFFF",
     "items": [
       {
@@ -43,7 +52,5 @@
     ]
   },
   "enableAppxNg": true,
-  "enableIosStretch": true,
-  "appId": "b678a385-0fc0-4688-8810-e7ef343afd2a",
-  "agentId": "4598010509"
+  "enableIosStretch": true
 }

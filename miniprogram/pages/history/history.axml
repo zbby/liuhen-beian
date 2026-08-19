@@ -1,57 +1,60 @@
 <!-- 历史记录 -->
 <view class="container">
-  <view class="page-header">
-    <text class="page-title">历史记录</text>
-    <text class="page-subtitle">已完结的备案事件</text>
+  <view class="brand-header">
+    <text class="brand-title">历史归档</text>
+    <text class="brand-subtitle">已完结事件分类备查</text>
   </view>
 
-  <!-- 筛选栏 -->
+  <!-- 搜索栏 -->
+  <view class="search-bar">
+    <input 
+      class="search-input" 
+      placeholder="搜索事件标题或描述" 
+      value="{{searchKeyword}}"
+      onInput="onSearchInput"
+      onConfirm="doSearch"
+    />
+    <view class="search-btn" onTap="doSearch">搜索</view>
+  </view>
+
+  <!-- 状态筛选 -->
   <view class="filter-bar">
-    <view 
-      class="filter-item {{filterType === 'all' ? 'active' : ''}}"
-      onTap="setFilter"
-      data-type="all"
-    >全部</view>
-    <view 
-      class="filter-item {{filterType === 'completed' ? 'active' : ''}}"
-      onTap="setFilter"
-      data-type="completed"
-    >已完成</view>
-    <view 
-      class="filter-item {{filterType === 'rejected' ? 'active' : ''}}"
-      onTap="setFilter"
-      data-type="rejected"
-    >已驳回</view>
+    <view class="filter-item {{filterType === 'all' ? 'active' : ''}}" onTap="setFilter" data-type="all">全部</view>
+    <view class="filter-item {{filterType === 'completed' ? 'active' : ''}}" onTap="setFilter" data-type="completed">已完结</view>
+    <view class="filter-item {{filterType === 'rejected' ? 'active' : ''}}" onTap="setFilter" data-type="rejected">已驳回</view>
+    <view class="filter-item {{filterType === 'archived' ? 'active' : ''}}" onTap="setFilter" data-type="archived">已归档</view>
   </view>
 
+  <!-- 分类筛选 -->
+  <scroll-view class="category-bar" scroll-x>
+    <view class="cat-filter {{filterCategory === 'all' ? 'active' : ''}}" onTap="setCategoryFilter" data-cat="all">全部</view>
+    <view class="cat-filter {{filterCategory === item.id ? 'active' : ''}}" a:for="{{categories}}" a:key="id" onTap="setCategoryFilter" data-cat="{{item.id}}">
+      {{item.icon}} {{item.name}}
+    </view>
+  </scroll-view>
+
+  <!-- 历史列表 -->
   <view class="history-list">
-    <view 
-      class="history-item"
-      a:for="{{historyList}}"
-      a:key="id"
-      onTap="goToDetail"
-      data-id="{{item.id}}"
-    >
-      <view class="history-left">
-        <view class="history-category" style="background-color: {{item.categoryColor}}"></view>
+    <view class="history-item" a:for="{{historyList}}" a:key="id" onTap="goToDetail" data-id="{{item.id}}">
+      <view class="hi-cat-icon" style="background-color: {{item.categoryColor}}">
+        <text>{{item.categoryIcon}}</text>
       </view>
-      <view class="history-content">
-        <view class="history-title">{{item.title}}</view>
-        <view class="history-desc">{{item.description}}</view>
-        <view class="history-footer">
-          <view class="history-meta">
-            <text>发起人：{{item.creator}}</text>
-            <text>完结：{{item.completeTime}}</text>
-          </view>
-          <view class="history-status tag tag-{{item.status}}">{{item.statusText}}</view>
+      <view class="hi-body">
+        <view class="hi-title">{{item.title}}</view>
+        <view class="hi-desc">{{item.description}}</view>
+        <view class="hi-meta">
+          <text class="hi-creator">{{item.creator.name}}</text>
+          <text class="hi-time">{{item.completeTime}}</text>
+          <text class="hi-cat">{{item.categoryName}}</text>
+          <text class="tag tag-{{item.status}}">{{item.statusText}}</text>
         </view>
       </view>
     </view>
+  </view>
 
-    <!-- 空状态 -->
-    <view class="empty-state" a:if="{{historyList.length === 0}}">
-      <text class="empty-state-icon">📋</text>
-      <text class="empty-state-text">暂无历史记录</text>
-    </view>
+  <!-- 空状态 -->
+  <view class="empty-state" a:if="{{historyList.length === 0 && !loading}}">
+    <text class="empty-state-icon">📋</text>
+    <text class="empty-state-text">暂无历史记录</text>
   </view>
 </view>

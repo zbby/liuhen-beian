@@ -1,79 +1,50 @@
 <!-- 个人中心 -->
 <view class="container">
-  <!-- 用户信息卡片 -->
-  <view class="user-card">
-    <view class="user-avatar">
-      <text>{{userInfo.name ? userInfo.name[0] : 'U'}}</text>
-    </view>
-    <view class="user-info">
-      <view class="user-name">{{userInfo.name || '未登录'}}</view>
-      <view class="user-dept">{{userInfo.department || '暂无部门信息'}}</view>
+  <!-- 用户信息头部 -->
+  <view class="brand-header">
+    <view class="profile-header">
+      <view class="profile-avatar" a:if="{{userInfo}}">
+        <text>{{userInfo.name[0]}}</text>
+      </view>
+      <view class="profile-info">
+        <text class="profile-name">{{userInfo.name || '未登录'}}</text>
+        <text class="profile-dept">{{userInfo.deptName || ''}} · {{userInfo.phone || ''}}</text>
+        <view class="profile-org" a:if="{{hasOrg}}">
+          <text class="profile-org-name">🏢 {{orgInfo.name}}</text>
+          <text class="profile-org-role">{{orgInfo.role === 'org_admin' ? '管理员' : '成员'}}</text>
+        </view>
+      </view>
     </view>
   </view>
 
-  <!-- 组织信息 -->
-  <view class="section">
-    <view class="section-title">我的组织</view>
-    <view class="list-item" onTap="viewOrg">
-      <view class="list-item-content">
-        <view class="list-item-title">{{orgInfo.name || '未加入组织'}}</view>
-        <view class="list-item-desc">{{orgInfo.memberCount || 0}} 名成员</view>
-      </view>
-      <text class="list-item-arrow">></text>
-    </view>
-    <view class="list-item" onTap="joinOrg" a:if="{{!orgInfo.name}}">
-      <view class="list-item-content">
-        <view class="list-item-title" style="color: #1890FF">加入组织</view>
-        <view class="list-item-desc">需要先加入组织才能发起备案</view>
-      </view>
-      <text class="list-item-arrow">></text>
-    </view>
+  <!-- 未加入组织提示 -->
+  <view class="card no-org-hint" a:if="{{!hasOrg}}">
+    <text class="no-org-hint-text">您还未加入组织</text>
+    <button class="btn btn-primary btn-sm" onTap="goToOrgJoin">立即加入</button>
   </view>
 
-  <!-- 统计信息 -->
-  <view class="stats-grid">
-    <view class="stat-card">
-      <view class="stat-value">{{stats.initiated}}</view>
-      <view class="stat-label">我发起的</view>
-    </view>
-    <view class="stat-card">
-      <view class="stat-value">{{stats.approved}}</view>
-      <view class="stat-label">我审批的</view>
-    </view>
-    <view class="stat-card">
-      <view class="stat-value">{{stats.completed}}</view>
-      <view class="stat-label">已完结</view>
-    </view>
-  </view>
-
-  <!-- 功能列表 -->
-  <view class="section">
-    <view class="section-title">设置</view>
-    <view class="list-item" onTap="showAbout">
-      <view class="list-item-content">
-        <view class="list-item-title">关于留痕备案</view>
-        <view class="list-item-desc">版本 1.0.0</view>
+  <!-- 菜单列表 -->
+  <view class="menu-section" a:for="{{menuSections}}" a:key="title">
+    <view class="menu-section-title">{{item.title}}</view>
+    <view class="card menu-card">
+      <view 
+        class="menu-item" 
+        a:for="{{item.items}}" 
+        a:key="id"
+        onTap="onMenuTap"
+        data-id="{{item.id}}"
+      >
+        <text class="menu-icon">{{item.icon}}</text>
+        <text class="menu-name">{{item.name}}</text>
+        <text class="menu-arrow">></text>
       </view>
-      <text class="list-item-arrow">></text>
-    </view>
-    <view class="list-item" onTap="showHelp">
-      <view class="list-item-content">
-        <view class="list-item-title">使用帮助</view>
-        <view class="list-item-desc">常见问题与使用说明</view>
-      </view>
-      <text class="list-item-arrow">></text>
-    </view>
-    <view class="list-item" onTap="contactSupport">
-      <view class="list-item-content">
-        <view class="list-item-title">联系支持</view>
-        <view class="list-item-desc">技术问题反馈</view>
-      </view>
-      <text class="list-item-arrow">></text>
     </view>
   </view>
 
   <!-- 退出登录 -->
-  <view class="logout-section" a:if="{{userInfo.name}}">
-    <button class="btn btn-default btn-block" onTap="logout">退出登录</button>
+  <view class="logout-section">
+    <button class="btn btn-default btn-block" onTap="doLogout">退出登录</button>
   </view>
+
+  <view class="safe-bottom"></view>
 </view>

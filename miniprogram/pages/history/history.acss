@@ -1,96 +1,130 @@
 /* 历史记录页样式 */
-.page-header {
-  padding: 32rpx 24rpx;
-  background-color: #1890FF;
-  color: #FFFFFF;
-  margin: -24rpx -24rpx 24rpx -24rpx;
+.search-bar {
+  display: flex;
+  gap: 12rpx;
+  margin-bottom: 20rpx;
 }
 
-.page-title {
-  font-size: 36rpx;
-  font-weight: 600;
-  display: block;
-}
-
-.page-subtitle {
+.search-input {
+  flex: 1;
+  height: 72rpx;
+  background-color: #FFFFFF;
+  border-radius: 36rpx;
+  padding: 0 28rpx;
   font-size: 26rpx;
-  opacity: 0.9;
-  display: block;
-  margin-top: 8rpx;
+  border: 2rpx solid #E8E8E8;
+  box-sizing: border-box;
+}
+
+.search-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 28rpx;
+  background-color: #0052D9;
+  color: #FFFFFF;
+  border-radius: 36rpx;
+  font-size: 26rpx;
+  font-weight: 500;
 }
 
 .filter-bar {
   display: flex;
   background-color: #FFFFFF;
   border-radius: 12rpx;
-  padding: 16rpx 24rpx;
-  margin-bottom: 24rpx;
-  gap: 32rpx;
+  padding: 6rpx;
+  margin-bottom: 16rpx;
+  gap: 4rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.04);
 }
 
 .filter-item {
-  font-size: 28rpx;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 60rpx;
+  border-radius: 8rpx;
+  font-size: 24rpx;
   color: #666666;
-  padding: 8rpx 0;
-  position: relative;
 }
 
 .filter-item.active {
-  color: #1890FF;
+  background-color: #0052D9;
+  color: #FFFFFF;
   font-weight: 600;
 }
 
-.filter-item.active::after {
-  content: '';
-  position: absolute;
-  bottom: -8rpx;
-  left: 0;
-  right: 0;
-  height: 4rpx;
-  background-color: #1890FF;
-  border-radius: 2rpx;
+.category-bar {
+  display: flex;
+  white-space: nowrap;
+  margin-bottom: 20rpx;
+  padding: 4rpx 0;
+}
+
+.cat-filter {
+  display: inline-block;
+  padding: 8rpx 20rpx;
+  margin-right: 12rpx;
+  background-color: #FFFFFF;
+  border-radius: 20rpx;
+  font-size: 24rpx;
+  color: #666666;
+  flex-shrink: 0;
+}
+
+.cat-filter.active {
+  background-color: #E8F0FE;
+  color: #0052D9;
+  font-weight: 600;
 }
 
 .history-list {
-  background-color: #FFFFFF;
-  border-radius: 12rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
 }
 
 .history-item {
   display: flex;
+  align-items: flex-start;
+  background-color: #FFFFFF;
+  border-radius: 16rpx;
   padding: 24rpx;
-  border-bottom: 1rpx solid #F0F0F0;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.05);
 }
 
-.history-item:last-child {
-  border-bottom: none;
+.hi-cat-icon {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 12rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32rpx;
+  margin-right: 20rpx;
+  flex-shrink: 0;
 }
 
-.history-left {
-  margin-right: 24rpx;
-}
-
-.history-category {
-  width: 8rpx;
-  height: 80rpx;
-  border-radius: 4rpx;
-}
-
-.history-content {
+.hi-body {
   flex: 1;
+  min-width: 0;
 }
 
-.history-title {
+.hi-title {
   font-size: 30rpx;
-  font-weight: 500;
+  font-weight: 600;
   color: #333333;
-  margin-bottom: 12rpx;
+  margin-bottom: 8rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.history-desc {
+.hi-desc {
   font-size: 26rpx;
   color: #999999;
-  margin-bottom: 16rpx;
+  margin-bottom: 12rpx;
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
@@ -98,39 +132,22 @@
   -webkit-box-orient: vertical;
 }
 
-.history-footer {
+.hi-meta {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 12rpx;
+  flex-wrap: wrap;
 }
 
-.history-meta {
-  display: flex;
-  flex-direction: column;
-  gap: 8rpx;
-  font-size: 24rpx;
-  color: #999999;
+.hi-creator, .hi-time {
+  font-size: 22rpx;
+  color: #C0C0C0;
 }
 
-.history-status {
-  font-size: 24rpx;
-}
-
-.empty-state {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 100rpx 0;
-}
-
-.empty-state-icon {
-  font-size: 120rpx;
-  color: #D9D9D9;
-  margin-bottom: 24rpx;
-}
-
-.empty-state-text {
-  font-size: 30rpx;
-  color: #666666;
+.hi-cat {
+  font-size: 20rpx;
+  color: #0052D9;
+  background-color: #E8F0FE;
+  padding: 2rpx 10rpx;
+  border-radius: 4rpx;
 }

@@ -1,101 +1,128 @@
 <!-- 事件详情 -->
-<view class="container">
-  <!-- 头部状态卡片 -->
-  <view class="header-card">
-    <view class="status-badge tag tag-{{event.status}}">{{event.statusText}}</view>
-    <view class="event-title">{{event.title}}</view>
-    <view class="event-meta">
-      <text>发起人：{{event.creator}}</text>
-      <text>时间：{{event.createTime}}</text>
-    </view>
-  </view>
-
-  <!-- 事件描述 -->
-  <view class="section">
-    <view class="section-title">事件描述</view>
-    <view class="section-content">
-      {{event.description}}
-    </view>
-  </view>
-
-  <!-- 附件列表 -->
-  <view class="section" a:if="{{event.attachments && event.attachments.length > 0}}">
-    <view class="section-title">附件 ({{event.attachments.length}})</view>
-    <view class="attachment-list">
-      <view 
-        class="attachment-item"
-        a:for="{{event.attachments}}"
-        a:key="index"
-        onTap="previewAttachment"
-        data-index="{{index}}"
-      >
-        <image class="attachment-thumb" src="{{item}}" mode="aspectFill" />
+<view class="container" a:if="{{!loading && event}}">
+  <!-- 状态头部 -->
+  <view class="detail-header" style="background: linear-gradient(135deg, {{event.categoryColor}}CC, {{event.categoryColor}})">
+    <view class="detail-header-top">
+      <text class="detail-cat-icon">{{event.categoryIcon}}</text>
+      <view class="detail-header-info">
+        <text class="detail-title">{{event.title}}</text>
+        <view class="detail-meta">
+          <text class="meta-tag">{{event.categoryName}}</text>
+          <text class="meta-tag">{{event.approvalModeText}}</text>
+          <text class="tag tag-{{event.status}}">{{event.statusText}}</text>
+        </view>
       </view>
     </view>
+    <view class="detail-header-bottom">
+      <text class="detail-creator">发起人：{{event.creator.name}}</text>
+      <text class="detail-time">{{event.createTime}}</text>
+    </view>
   </view>
 
-  <!-- 审批流程 -->
-  <view class="section">
-    <view class="section-title">审批流程</view>
-    <view class="approval-mode-tag">
-      模式：{{event.approvalModeText}}
+  <!-- 描述 -->
+  <view class="card">
+    <view class="card-title">事件描述</view>
+    <view class="detail-desc">{{event.description}}</view>
+  </view>
+
+  <!-- 标签切换 -->
+  <view class="tabs-bar">
+    <view class="tab-item {{activeTab === 'flow' ? 'active' : ''}}" onTap="switchTab" data-tab="flow">
+      <text>审批链</text>
     </view>
-    
+    <view class="tab-item {{activeTab === 'attachments' ? 'active' : ''}}" onTap="switchTab" data-tab="attachments">
+      <text>附件 ({{event.attachments.length}})</text>
+    </view>
+    <view class="tab-item {{activeTab === 'logs' ? 'active' : ''}}" onTap="switchTab" data-tab="logs">
+      <text>操作日志</text>
+    </view>
+  </view>
+
+  <!-- 审批链 -->
+  <view a:if="{{activeTab === 'flow'}}">
     <view class="timeline">
-      <view 
-        class="timeline-item {{item.completed ? 'completed' : ''}}"
-        a:for="{{event.approvalFlow}}"
-        a:key="index"
-      >
-        <view class="timeline-dot"></view>
+      <view class="timeline-item" a:for="{{event.approvalFlow}}" a:key="id">
+        <view class="timeline-dot {{item.status}}">
+          <text a:if="{{item.status === 'completed'}}">✓</text>
+          <text a:elif="{{item.status === 'rejected'}}">✕</text>
+          <text a:elif="{{item.status === 'pending'}}">●</text>
+          <text a:elif="{{item.status === 'notified'}}">📎</text>
+        </view>
+        <view class="timeline-line" a:if="{{index < event.approvalFlow.length - 1}}"></view>
         <view class="timeline-content">
-          <view class="timeline-title">{{item.approverName}}</view>
-          <view class="timeline-role">{{item.role}}</view>
-          <view class="timeline-status">{{item.statusText}}</view>
-          <view class="timeline-time" a:if="{{item.time}}">{{item.time}}</view>
-          <view class="timeline-comment" a:if="{{item.comment}}">
-            意见：{{item.comment}}
+          <view class="timeline-header">
+            <text class="timeline-name">{{item.approverName}}</text>
+            <text class="timeline-role">{{item.approverRole}}</text>
+            <text class="tag tag-{{item.status === 'completed' ? 'completed' : item.status === 'rejected' ? 'rejected' : item.status === 'pending' ? 'pending_approval' : 'archived'}}">{{item.statusText}}</text>
           </view>
+          <view class="timeline-time" a:if="{{item.time}}">{{item.time}}</view>
+          <view class="timeline-comment" a:if="{{item.comment}}">{{item.comment}}</view>
+          <view class="timeline-node-type">{{item.nodeType === 'approval' ? '审批节点' : item.nodeType === 'cc' ? '知会节点' : item.nodeType === 'witness' ? '见证节点' : '执行节点'}}</view>
         </view>
       </view>
     </view>
   </view>
 
-  <!-- 通知人员 -->
-  <view class="section" a:if="{{event.notifyUsers && event.notifyUsers.length > 0}}">
-    <view class="section-title">通知人员</view>
-    <view class="notify-list">
-      <view 
-        class="notify-item"
-        a:for="{{event.notifyUsers}}"
-        a:key="index"
-      >
-        <text>{{item.name}}</text>
-        <text class="notify-status {{item.notified ? 'notified' : ''}}">
-          {{item.notified ? '已通知' : '未通知'}}
-        </text>
+  <!-- 附件 -->
+  <view a:if="{{activeTab === 'attachments'}}">
+    <view class="attach-list">
+      <view class="attach-item" a:for="{{event.attachments}}" a:key="id" onTap="previewAttachment" data-index="{{index}}">
+        <view class="attach-thumb">
+          <image a:if="{{item.type === 'image'}}" src="{{item.preview}}" mode="aspectFill" class="attach-img" />
+          <view a:elif="{{item.type === 'video'}}" class="attach-file-icon">🎬</view>
+          <view a:elif="{{item.type === 'audio'}}" class="attach-file-icon">🎵</view>
+          <view a:else class="attach-file-icon">📄</view>
+        </view>
+        <view class="attach-info">
+          <text class="attach-name">{{item.name}}</text>
+          <text class="attach-type">{{item.type}}</text>
+        </view>
       </view>
+    </view>
+    <view class="empty-state" a:if="{{event.attachments.length === 0}}">
+      <text class="empty-state-icon">📎</text>
+      <text class="empty-state-text">暂无附件</text>
     </view>
   </view>
 
   <!-- 操作日志 -->
-  <view class="section">
-    <view class="section-title">操作日志</view>
+  <view a:if="{{activeTab === 'logs'}}">
     <view class="log-list">
-      <view 
-        class="log-item"
-        a:for="{{event.logs}}"
-        a:key="index"
-      >
-        <view class="log-time">{{item.time}}</view>
-        <view class="log-content">{{item.content}}</view>
+      <view class="log-item" a:for="{{event.logs}}" a:key="index">
+        <view class="log-dot {{item.type}}"></view>
+        <view class="log-content">
+          <text class="log-text">{{item.content}}</text>
+          <text class="log-time">{{item.time}}</text>
+        </view>
       </view>
     </view>
   </view>
 
-  <!-- 底部操作栏 -->
-  <view class="action-bar" a:if="{{canApprove}}">
-    <button class="btn btn-default" onTap="rejectEvent">驳回</button>
-    <button class="btn btn-primary" onTap="approveEvent">同意</button>
+  <!-- 通知信息 -->
+  <view class="card" a:if="{{event.notifyUsers.length > 0}}">
+    <view class="card-title">DING 通知人员</view>
+    <view class="notify-list">
+      <view class="notify-item" a:for="{{event.notifyUsers}}" a:key="index">
+        <text class="notify-avatar">{{item.name[0]}}</text>
+        <text class="notify-name">{{item.name}}</text>
+        <text class="notify-status">{{item.notified ? '已通知' : '待通知'}}</text>
+      </view>
+    </view>
+    <view class="notify-hint">仅事件发起时 Ding，其他状态变更走静默工作通知</view>
   </view>
+
+  <!-- 底部操作栏 -->
+  <view class="action-bar" a:if="{{canApprove || canWithdraw}}">
+    <button a:if="{{canWithdraw}}" class="btn btn-default btn-sm" onTap="doWithdraw">撤回</button>
+    <button a:if="{{canApprove}}" class="btn btn-default btn-sm" onTap="doTransfer">转办</button>
+    <button a:if="{{canApprove}}" class="btn btn-danger btn-sm" onTap="doReject">驳回</button>
+    <button a:if="{{canApprove}}" class="btn btn-primary btn-sm" onTap="doApprove">同意</button>
+  </view>
+  <view class="safe-bottom"></view>
+</view>
+
+<!-- 加载中 -->
+<view class="empty-state" a:if="{{loading}}">
+  <text class="empty-state-icon">⏳</text>
+  <text class="empty-state-text">加载中...</text>
 </view>

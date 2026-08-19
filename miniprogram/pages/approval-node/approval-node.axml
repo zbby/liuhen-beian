@@ -1,0 +1,15 @@
+<view class="container">
+  <view class="brand-header">
+    <text class="brand-title">审批节点</text>
+  </view>
+  <view class="card" a:if="{{node}}">
+    <view class="form-group">
+      <view class="form-label">审批人</view>
+      <text>{{node.approverName}} ({{node.approverRole}})</text>
+    </view>
+    <view class="form-group">
+      <view class="form-label">状态</view>
+      <text class="tag tag-{{node.status}}">{{node.statusText}}</text>
+    </view>
+  </view>
+</view>

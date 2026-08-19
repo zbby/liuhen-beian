@@ -1,0 +1,52 @@
+<!-- 甲供材归还退库 -->
+<view class="container">
+  <view class="brand-header">
+    <text class="brand-title">归还退库</text>
+    <text class="brand-subtitle">归还或退库恢复在库</text>
+  </view>
+  <view class="card">
+    <view class="form-group">
+      <view class="form-label">材料名称<span class="required">*</span></view>
+      <input class="form-input" placeholder="如：OTDR 测试仪" value="{{form.materialName}}" onInput="onInput" data-field="materialName" />
+    </view>
+    <view class="form-group">
+      <view class="form-label">规格型号</view>
+      <input class="form-input" placeholder="规格型号" value="{{form.spec}}" onInput="onInput" data-field="spec" />
+    </view>
+    <view class="form-group">
+      <view class="form-label">数量<span class="required">*</span></view>
+      <input class="form-input" type="number" placeholder="归还数量" value="{{form.quantity}}" onInput="onInput" data-field="quantity" />
+    </view>
+    <view class="form-group">
+      <view class="form-label">归还项目</view>
+      <input class="form-input" placeholder="从哪个项目归还" value="{{form.fromProject}}" onInput="onInput" data-field="fromProject" />
+    </view>
+    <view class="form-group">
+      <view class="form-label">归还状况</view>
+      <input class="form-input" placeholder="如：完好/轻微磨损/需维修" value="{{form.returnCondition}}" onInput="onInput" data-field="returnCondition" />
+    </view>
+    <view class="form-group">
+      <view class="form-label">备注</view>
+      <textarea class="form-textarea" placeholder="备注说明" value="{{form.remark}}" onInput="onInput" data-field="remark" />
+    </view>
+    <view class="form-group" a:if="{{autoCategory}}">
+      <view class="form-label">系统分类</view>
+      <view class="category-preview">
+        <text class="cat-icon">{{autoCategory.icon}}</text>
+        <text class="cat-name" style="color: {{autoCategory.color}}">{{autoCategory.categoryName}}</text>
+      </view>
+    </view>
+    <view class="form-group">
+      <view class="form-label">附件</view>
+      <view class="upload-grid">
+        <view class="upload-item" a:for="{{form.attachments}}" a:key="index">
+          <image class="upload-preview" src="{{item.preview}}" mode="aspectFill" />
+          <view class="upload-delete" onTap="removeAttachment" data-index="{{index}}">×</view>
+        </view>
+        <view class="upload-add" onTap="chooseImage"><text class="upload-add-icon">+</text><text class="upload-add-text">上传</text></view>
+      </view>
+    </view>
+  </view>
+  <button class="btn btn-primary btn-block" onTap="submit" disabled="{{submitting}}">提交归还</button>
+  <view class="safe-bottom"></view>
+</view>

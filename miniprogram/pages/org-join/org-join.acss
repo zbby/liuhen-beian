@@ -1,0 +1,96 @@
+/* 组织注册/加入页面样式 */
+.choice-card {
+  display: flex;
+  align-items: center;
+  background-color: #FFFFFF;
+  border-radius: 16rpx;
+  padding: 32rpx 28rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.05);
+}
+
+.choice-icon {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 20rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FFFFFF;
+  font-size: 40rpx;
+  font-weight: 700;
+  margin-right: 28rpx;
+  flex-shrink: 0;
+}
+
+.create-icon {
+  background: linear-gradient(135deg, #0052D9, #2670E8);
+}
+
+.join-icon {
+  background: linear-gradient(135deg, #52C41A, #95DE64);
+}
+
+.choice-info {
+  flex: 1;
+}
+
+.choice-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333333;
+  display: block;
+  margin-bottom: 8rpx;
+}
+
+.choice-desc {
+  font-size: 24rpx;
+  color: #999999;
+}
+
+.choice-arrow {
+  font-size: 32rpx;
+  color: #C0C0C0;
+  flex-shrink: 0;
+}
+
+.tips-card {
+  background-color: #FFFFFF;
+  border-radius: 16rpx;
+  padding: 28rpx;
+  margin-top: 8rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.05);
+}
+
+.tips-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #333333;
+  margin-bottom: 16rpx;
+}
+
+.tips-item {
+  font-size: 24rpx;
+  color: #999999;
+  line-height: 1.8;
+}
+
+.step-form {
+  margin-top: 8rpx;
+}
+
+.form-hint-block {
+  font-size: 24rpx;
+  color: #999999;
+  margin-top: 12rpx;
+  line-height: 1.5;
+}
+
+.form-back {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24rpx 0;
+  font-size: 28rpx;
+  color: #999999;
+}
