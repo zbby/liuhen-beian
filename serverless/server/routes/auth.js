@@ -65,12 +65,19 @@ router.post('/login', asyncHandler(async (req, res) => {
 
   return {
     sessionToken: token,
-    account: {
+    user: {
       id: accountId,
+      userId: dingUserId || unionId,
       name: name,
       avatar: avatar,
-      mobile: maskMobile(mobile || ''),
+      phone: maskMobile(mobile || ''),
+      token: token,
     },
+    org: memberships.length > 0 ? {
+      id: memberships[0].org_id,
+      name: '',
+      roles: memberships[0].roles,
+    } : null,
     orgs: memberships.map((m) => ({
       org_id: m.org_id,
       roles: m.roles,

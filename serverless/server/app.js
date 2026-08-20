@@ -41,6 +41,14 @@ app.get('/api/health', (req, res) => {
   res.json({ code: 0, message: 'ok', data: { status: 'running', time: new Date().toISOString() } });
 });
 
+// ===== API 根路径 =====
+app.get('/api/', (req, res) => {
+  res.json({ code: 0, message: 'ok', data: { service: 'liuhen-beian', version: '1.0.0' } });
+});
+app.get('/api', (req, res) => {
+  res.json({ code: 0, message: 'ok', data: { service: 'liuhen-beian', version: '1.0.0' } });
+});
+
 // ===== 路由挂载 =====
 app.use('/api/auth', authRoutes);
 app.use('/api/org', orgRoutes);
