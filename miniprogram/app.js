@@ -6,8 +6,8 @@ const { initCloud } = require('./utils/api');
 App({
   globalData: {
     // ===== 钉钉应用配置 =====
-    appId: 'b678a385-0fc0-4688-8810-e7ef343afd2a',
-    agentId: '4598010509',
+    appId: '765fe4e3-301a-4238-8951-f24d740e9989',
+    agentId: '4938869267',
 
     // ===== 后端模式 =====
     // 'http' = 传统 HTTP 后端（部署在 ECS 8.147.61.234:3000）
