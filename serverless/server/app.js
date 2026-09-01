@@ -5,6 +5,9 @@
  * 留痕备案 + 甲供材流转后端
  */
 
+// ===== 必须在所有其他 require 之前加载 .env =====
+require('dotenv').config();
+
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');

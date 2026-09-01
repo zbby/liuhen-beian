@@ -22,7 +22,7 @@ module.exports = {
   // JWT
   jwt: {
     secret: process.env.JWT_SECRET || 'liuhen-beian-jwt-secret-dev',
-    expiresIn: 7200,        // 2小时
+    expiresIn: process.env.JWT_EXPIRES_IN || 7200,  // 秒数或如 '7d' 的字符串
     refreshWindow: 1800,    // 最后30分钟可续签
   },
 
