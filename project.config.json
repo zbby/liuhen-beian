@@ -9,7 +9,9 @@
     {
       "name": "miniprogram",
       "path": "miniprogram",
-      "type": "miniProgram"
+      "type": "miniProgram",
+      "appKey": "dingrf3hkioixsaedyup",
+      "miniAppId": "5000000006864073"
     },
     {
       "name": "serverless",

@@ -1,0 +1,6 @@
+{
+  "format": 2,
+  "miniprogramRoot": "miniprogram/",
+  "component2": true,
+  "enableAppxNg": true
+}
