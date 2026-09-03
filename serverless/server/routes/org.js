@@ -19,12 +19,22 @@ router.get('/list', asyncHandler(async (req, res) => {
   return await orgService.listMyOrgs(req.currentUser.account_id);
 }));
 
+// GET /api/org/search — 搜索组织
+router.get('/search', asyncHandler(async (req, res) => {
+  return await orgService.searchOrgs(req.query.keyword || '');
+}));
+
 // POST /api/org/create — 创建组织
 router.post('/create', asyncHandler(async (req, res) => {
   return await orgService.create(req.currentUser.account_id, req.body);
 }));
 
-// POST /api/org/join-by-invite — 邀请码加入
+// POST /api/org/join — 按组织ID加入
+router.post('/join', asyncHandler(async (req, res) => {
+  return await orgService.joinById(req.currentUser.account_id, req.body.org_id);
+}));
+
+// POST /api/org/join-by-invite — 邀请码加入（兼容旧版）
 router.post('/join-by-invite', asyncHandler(async (req, res) => {
   return await orgService.joinByInvite(req.currentUser.account_id, req.body.inviteCode);
 }));

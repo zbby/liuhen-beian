@@ -14,6 +14,15 @@ class OrgDao extends BaseDao {
     return this.findOne({ org_code: orgCode });
   }
 
+  async searchByName(keyword) {
+    // MongoDB 正则搜索，不区分大小写
+    const escaped = keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    return this.find(
+      { status: 'ACTIVE', name: { $regex: escaped, $options: 'i' } },
+      { sort: { created_at: -1 }, limit: 20 }
+    );
+  }
+
   async findActive() {
     return this.find({ status: 'ACTIVE' }, { sort: { created_at: -1 } });
   }

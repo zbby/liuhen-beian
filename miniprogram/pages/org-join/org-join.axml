@@ -20,11 +20,11 @@
 
     <view class="choice-card" onTap="switchStep" data-step="join">
       <view class="choice-icon join-icon">
-        <text>#</text>
+        <text>S</text>
       </view>
       <view class="choice-info">
         <text class="choice-title">加入组织</text>
-        <text class="choice-desc">输入邀请码加入已有组织</text>
+        <text class="choice-desc">搜索组织名称，申请加入</text>
       </view>
       <text class="choice-arrow">></text>
     </view>
@@ -32,7 +32,7 @@
     <view class="tips-card">
       <view class="tips-title">关于组织</view>
       <view class="tips-item">· 组织是留痕报备的基本单位，事件在组织内流转</view>
-      <view class="tips-item">· 创建组织后可生成邀请码邀请成员加入</view>
+      <view class="tips-item">· 搜索组织名称即可加入，无需邀请码</view>
       <view class="tips-item">· 组织管理员可管理成员、配置审批模板</view>
       <view class="tips-item">· 数据在组织范围内隔离，符合信息安全要求</view>
     </view>
@@ -74,28 +74,62 @@
     </view>
   </view>
 
-  <!-- 加入组织 -->
+  <!-- 搜索加入组织 -->
   <view class="step-form" a:if="{{step === 'join'}}">
     <view class="card">
       <view class="form-group">
         <view class="form-label">
-          邀请码<span class="required">*</span>
+          搜索组织<span class="required">*</span>
         </view>
         <input 
           class="form-input" 
-          placeholder="请输入组织邀请码"
-          value="{{inviteCode}}"
-          onInput="onInviteCodeInput"
-          maxlength="32"
+          placeholder="输入组织名称搜索"
+          value="{{searchKeyword}}"
+          onInput="onSearchInput"
+          maxlength="50"
         />
         <view class="form-hint-block">
-          邀请码由组织管理员在"我的-组织管理"中生成
+          输入组织名称或关键词即可搜索并加入
         </view>
       </view>
 
-      <button class="btn btn-primary btn-block" onTap="joinOrg" disabled="{{submitting}}">
-        加入组织
-      </button>
+      <!-- 搜索结果列表 -->
+      <view class="search-results" a:if="{{searchKeyword}}">
+        <!-- 搜索中 -->
+        <view class="search-loading" a:if="{{searching}}">
+          <text>搜索中...</text>
+        </view>
+
+        <!-- 结果列表 -->
+        <block a:elif="{{searchResults.length > 0}}">
+          <view 
+            class="org-item"
+            a:for="{{searchResults}}"
+            a:key="org_id"
+            onTap="onOrgTap"
+            data-id="{{item.org_id}}"
+            data-name="{{item.name}}"
+          >
+            <view class="org-item-icon">
+              <text>O</text>
+            </view>
+            <view class="org-item-info">
+              <text class="org-item-name">{{item.name}}</text>
+              <text class="org-item-meta">组织ID: {{item.org_code}}</text>
+            </view>
+            <view class="org-item-action {{submitting ? 'disabled' : ''}}">
+              <text>加入</text>
+            </view>
+          </view>
+        </block>
+
+        <!-- 无结果 -->
+        <view class="search-empty" a:elif="{{!searching}}">
+          <text class="search-empty-text">未找到匹配的组织</text>
+          <text class="search-empty-hint">请检查名称或尝试其他关键词</text>
+        </view>
+      </view>
+
       <view class="form-back" onTap="switchStep" data-step="choose">
         <text>返回</text>
       </view>

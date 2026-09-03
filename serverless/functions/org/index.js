@@ -26,13 +26,25 @@ exports.handler = async function (event, context) {
       return success(result);
     }
 
+    // GET /org/search — 搜索组织
+    if (path === '/org/search' && method === 'GET') {
+      const result = await services.org.searchOrgs(query.keyword || '');
+      return success(result);
+    }
+
     // POST /org/create — 创建组织
     if (path === '/org/create' && method === 'POST') {
       const result = await services.org.create(currentUser.account_id, body);
       return success(result);
     }
 
-    // POST /org/join-by-invite — 邀请码加入
+    // POST /org/join — 按组织ID加入
+    if (path === '/org/join' && method === 'POST') {
+      const result = await services.org.joinById(currentUser.account_id, body.org_id);
+      return success(result);
+    }
+
+    // POST /org/join-by-invite — 邀请码加入（兼容旧版）
     if (path === '/org/join-by-invite' && method === 'POST') {
       const result = await services.org.joinByInvite(currentUser.account_id, body.inviteCode);
       return success(result);

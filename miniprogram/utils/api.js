@@ -127,7 +127,9 @@ const api = {
   // -- 组织 --
   org: {
     list: () => request({ url: '/org/list' }),
+    search: (keyword) => request({ url: '/org/search', data: { keyword } }),
     create: (orgData) => request({ url: '/org/create', method: 'POST', data: orgData }),
+    join: (orgId) => request({ url: '/org/join', method: 'POST', data: { org_id: orgId } }),
     joinByInvite: (inviteCode) => request({ url: '/org/join-by-invite', method: 'POST', data: { inviteCode } }),
     getMembers: (orgId, page = 1, size = 20) => request({ url: '/org/members', data: { org_id: orgId, page, size } }),
     leave: (orgId) => request({ url: '/org/leave', method: 'POST', data: { org_id: orgId } }),

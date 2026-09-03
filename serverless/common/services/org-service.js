@@ -80,6 +80,54 @@ class OrgService {
   }
 
   /**
+   * 按名称搜索组织
+   */
+  async searchOrgs(keyword) {
+    if (!keyword || keyword.trim().length === 0) {
+      return [];
+    }
+    const orgs = await this.dao.org.searchByName(keyword.trim());
+    return orgs.map(o => ({
+      org_id: o._id,
+      name: o.name,
+      org_code: o.org_code,
+      type: o.type,
+      created_at: o.created_at,
+    }));
+  }
+
+  /**
+   * 通过组织ID加入（直接加入，无需邀请码）
+   */
+  async joinById(accountId, orgId) {
+    const org = await this.dao.org.findById(orgId);
+    if (!org) throw new BizError(ERROR_CODES.ORG_NOT_FOUND, '组织不存在');
+
+    const existing = await this.dao.membership.findByAccountAndOrg(accountId, org._id);
+    if (existing && existing.status === MEMBERSHIP_STATUS.ACTIVE) {
+      throw new BizError(ERROR_CODES.ORG_ALREADY_MEMBER, '您已是该组织成员');
+    }
+
+    if (existing) {
+      await this.dao.membership.updateById(existing._id, {
+        status: MEMBERSHIP_STATUS.ACTIVE,
+        joined_at: nowISO(),
+      });
+    } else {
+      await this.dao.membership.insertOne({
+        account_id: accountId,
+        org_id: org._id,
+        roles: ['MEMBER'],
+        data_scopes: [{ role: 'MEMBER', scope_type: 'SELF' }],
+        status: MEMBERSHIP_STATUS.ACTIVE,
+        joined_at: nowISO(),
+      });
+    }
+
+    return { org_id: org._id, org_name: org.name };
+  }
+
+  /**
    * 我的组织列表
    */
   async listMyOrgs(accountId) {
