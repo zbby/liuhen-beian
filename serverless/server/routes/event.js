@@ -1,4 +1,4 @@
-﻿/**
+/**
  * server/routes/event.js
  * 事件路由 — 提交/详情/列表/撤回/处理
  */
@@ -35,7 +35,7 @@ router.post('/submit', asyncHandler(async (req, res) => {
 
   // 发起事件时发送 DING（仅此一次）
   if (req.body.must_notify_user_ids && req.body.must_notify_user_ids.length > 0) {
-    await notifyService.sendDingOnCreate(orgId, result.event_id, req.body.must_notify_user_ids, `【留痕备案】${req.body.title}`);
+    await notifyService.sendDingOnCreate(orgId, result.event_id, req.body.must_notify_user_ids, `【留痕报备】${req.body.title}`);
   }
 
   return result;

@@ -9,7 +9,7 @@ ECS_HOST="8.147.61.234"
 ECS_USER="root"
 REMOTE_DIR="/root/liuhen-beian-server"
 
-echo "===== 留痕备案后端部署 ====="
+echo "===== 留痕报备后端部署 ====="
 echo "目标: ${ECS_USER}@${ECS_HOST}:${REMOTE_DIR}"
 echo ""
 

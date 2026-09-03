@@ -3,13 +3,13 @@ AIGC:
   ContentProducer: '001191110102MAD55U9H0F10002'
   ContentPropagator: '001191110102MAD55U9H0F10002'
   Label: '1'
-  ProduceID: '7a6e661d-45dd-487c-b214-a21a9b336b0c'
-  PropagateID: '7a6e661d-45dd-487c-b214-a21a9b336b0c'
-  ReservedCode1: '4e8b0c42-1830-4f3c-89e2-76a49fa9f010'
-  ReservedCode2: '4e8b0c42-1830-4f3c-89e2-76a49fa9f010'
+  ProduceID: 'adb16a04-4f5c-49b8-ac55-a8a23b6817e7'
+  PropagateID: 'adb16a04-4f5c-49b8-ac55-a8a23b6817e7'
+  ReservedCode1: '861e5785-9d6d-47bd-8521-10da66b5c629'
+  ReservedCode2: '861e5785-9d6d-47bd-8521-10da66b5c629'
 ---
 
-# 留痕备案 - 部署指南
+# 留痕报备 - 部署指南
 
 ## 项目结构
 
@@ -271,7 +271,7 @@ server {
         rewrite ^(/.*)$ https://$host$1 permanent;
     }
     
-    # ===== 留痕备案 API 反向代理 =====
+    # ===== 留痕报备 API 反向代理 =====
     # 必须在 PHP location 之前，否则被 PHP 拦截
     location /api/ {
         proxy_pass http://127.0.0.1:3000;

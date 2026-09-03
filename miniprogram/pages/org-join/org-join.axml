@@ -1,7 +1,7 @@
 <!-- 组织注册/加入 -->
 <view class="container">
   <view class="brand-header">
-    <text class="brand-title">欢迎使用留痕备案</text>
+    <text class="brand-title">欢迎使用留痕报备</text>
     <text class="brand-subtitle">请创建或加入一个组织开始使用</text>
   </view>
 
@@ -13,7 +13,7 @@
       </view>
       <view class="choice-info">
         <text class="choice-title">创建组织</text>
-        <text class="choice-desc">新建一个留痕备案组织，成为管理员</text>
+        <text class="choice-desc">新建一个留痕报备组织，成为管理员</text>
       </view>
       <text class="choice-arrow">></text>
     </view>
@@ -31,7 +31,7 @@
 
     <view class="tips-card">
       <view class="tips-title">关于组织</view>
-      <view class="tips-item">· 组织是留痕备案的基本单位，事件在组织内流转</view>
+      <view class="tips-item">· 组织是留痕报备的基本单位，事件在组织内流转</view>
       <view class="tips-item">· 创建组织后可生成邀请码邀请成员加入</view>
       <view class="tips-item">· 组织管理员可管理成员、配置审批模板</view>
       <view class="tips-item">· 数据在组织范围内隔离，符合信息安全要求</view>

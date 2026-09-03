@@ -4,7 +4,7 @@
   <view class="brand-header">
     <view class="header-top">
       <view>
-        <text class="brand-title">留痕备案</text>
+        <text class="brand-title">留痕报备</text>
         <text class="brand-subtitle">安全合规 · 全程留痕 · 状态跟随</text>
       </view>
       <view class="header-user" a:if="{{userName}}">
@@ -20,7 +20,7 @@
   <view class="card no-org-card" a:if="{{!hasOrg}}">
     <text class="no-org-icon">📋</text>
     <text class="no-org-title">您还未加入组织</text>
-    <text class="no-org-desc">创建或加入一个组织后即可开始使用留痕备案功能</text>
+    <text class="no-org-desc">创建或加入一个组织后即可开始使用留痕报备功能</text>
     <button class="btn btn-primary btn-sm" onTap="goToOrgJoin">立即加入</button>
   </view>
 

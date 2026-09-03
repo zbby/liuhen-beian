@@ -1,4 +1,4 @@
-// 留痕备案 - 钉钉小程序
+// 留痕报备 - 钉钉小程序
 // 基于钉钉小程序云 Serverless 架构
 
 const { initCloud } = require('./utils/api');
@@ -136,7 +136,7 @@ App({
   },
 
   onLaunch() {
-    console.log('[留痕备案] 小程序启动');
+    console.log('[留痕报备] 小程序启动');
     // 初始化钉钉小程序云
     if (this.globalData.backendMode === 'cloud') {
       initCloud();
@@ -146,11 +146,11 @@ App({
   },
 
   onShow() {
-    console.log('[留痕备案] 小程序进入前台');
+    console.log('[留痕报备] 小程序进入前台');
   },
 
   onHide() {
-    console.log('[留痕备案] 小程序进入后台');
+    console.log('[留痕报备] 小程序进入后台');
   },
 
   // ===== 恢复缓存的登录信息 =====

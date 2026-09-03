@@ -50,7 +50,7 @@ exports.handler = async function (event, context) {
           body.org_id || currentUser.org_id,
           result.event_id,
           body.must_notify_user_ids,
-          `【留痕备案】${body.title}`
+          `【留痕报备】${body.title}`
         );
       }
 

@@ -1,4 +1,4 @@
-// 发起留痕备案
+// 发起留痕报备
 const { api } = require('../../utils/api');
 const { classify } = require('../../utils/classify');
 const { APPROVAL_MODE, EVENT_STATUS } = require('../../utils/constants');

@@ -165,7 +165,7 @@ Page({
   // 关于
   showAbout() {
     my.showModal({
-      title: '关于留痕备案',
+      title: '关于留痕报备',
       content: '版本：v1.0.0\n\n钉钉小程序 + 云 Serverless 架构\n支持鸿蒙 / Android / iOS / 桌面\n\n功能：事件留痕 + 不定长审批 + 归档检索 + DING 通知 + 甲供材流转',
       showCancel: false
     });

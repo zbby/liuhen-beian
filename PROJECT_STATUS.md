@@ -1,4 +1,15 @@
-# 留痕备案 - 项目进度
+---
+AIGC:
+  ContentProducer: '001191110102MAD55U9H0F10002'
+  ContentPropagator: '001191110102MAD55U9H0F10002'
+  Label: '1'
+  ProduceID: '20fff43f-8cbb-46f9-8d2a-3eeff1c19cd2'
+  PropagateID: '20fff43f-8cbb-46f9-8d2a-3eeff1c19cd2'
+  ReservedCode1: 'c40bd875-1258-46f8-952f-7770be712c44'
+  ReservedCode2: 'c40bd875-1258-46f8-952f-7770be712c44'
+---
+
+# 留痕报备 - 项目进度
 
 ## ✅ 已完成 (2026-05-20)
 
@@ -156,3 +167,5 @@ backend/
 
 **最后更新**: 2026-05-20 15:55
 **项目负责人**: 张宝宇
+
+> AI生成

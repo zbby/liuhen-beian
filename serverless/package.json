@@ -1,7 +1,7 @@
 {
   "name": "liuhen-beian-server",
   "version": "1.0.0",
-  "description": "留痕备案 + 甲供材流转 - 后端 HTTP 服务",
+  "description": "留痕报备 + 甲供材流转 - 后端 HTTP 服务",
   "main": "server/app.js",
   "scripts": {
     "start": "node server/app.js",

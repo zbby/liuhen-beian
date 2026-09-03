@@ -2,7 +2,7 @@
  * server/app.js
  * Express HTTP 服务入口
  * 
- * 留痕备案 + 甲供材流转后端
+ * 留痕报备 + 甲供材流转后端
  */
 
 // ===== 必须在所有其他 require 之前加载 .env =====
@@ -89,9 +89,9 @@ async function start() {
 
   // 启动 HTTP 服务
   app.listen(config.port, '0.0.0.0', () => {
-    console.log(`[留痕备案] 后端服务已启动: http://0.0.0.0:${config.port}`);
-    console.log(`[留痕备案] API 基础路径: https://zhangbaoyu.site/api`);
-    console.log(`[留痕备案] 健康检查: https://zhangbaoyu.site/api/health`);
+    console.log(`[留痕报备] 后端服务已启动: http://0.0.0.0:${config.port}`);
+    console.log(`[留痕报备] API 基础路径: https://zhangbaoyu.site/api`);
+    console.log(`[留痕报备] 健康检查: https://zhangbaoyu.site/api/health`);
   });
 }
 

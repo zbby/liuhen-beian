@@ -16,8 +16,8 @@
     "pages/template-select/template-select"
   ],
   "window": {
-    "defaultTitle": "留痕备案",
-    "navigationBarTitleText": "留痕备案",
+    "defaultTitle": "留痕报备",
+    "navigationBarTitleText": "留痕报备",
     "navigationBarBackgroundColor": "#0052D9",
     "navigationBarTextStyle": "white",
     "backgroundColor": "#F5F6FA",
